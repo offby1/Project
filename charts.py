@@ -1,0 +1,165 @@
+__author__ = 'emmaachberger'
+
+import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine
+
+from helperfunctions import returnTable, droplevel
+import sqlqueries
+
+engine = create_engine('sqlite:///money.db')
+owners = ['Emma','Dan']
+
+def spendingdata():
+
+    a = sqlqueries.sqlmonthlyexpenses()
+    multiplier = "* - 1"
+    string = "WHERE categories.Spending"
+
+    df = pd.read_sql(a %(multiplier, string), engine, parse_dates='Date')
+
+    return returnTable(df)
+
+#print spendingdata()
+def netincomedata():
+
+    a = sqlqueries.sqlmonthlyexpenses()
+    string = ""
+    multiplier = ""
+
+    df = pd.read_sql(a %(string, multiplier), engine, parse_dates='Date')
+
+    return returnTable(df)
+
+
+def balanceData():
+
+    a = sqlqueries.sqlmonthlybalances() ### bankaccounts, balances
+
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    df = pd.pivot_table(df, index=['transdate','owner', 'FXRate'],values=["balance"],columns=['AccountName'],fill_value=0).reset_index()
+    ### takes daily balance data and returns dataframe with each account as separate column
+
+    droplevel(df) # adjusts column names that occurred from pivoting
+    return returnTable(df)
+
+
+
+def stockData():
+
+    a = sqlqueries.sqlstockgain()
+
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    df['Gain/Loss'] = np.cumsum(df.groupby(['owner', 'description'])['Gain/Loss'])
+    df = pd.pivot_table(df, index=['transdate','owner', 'FXRate'],values=["Gain/Loss"],columns=['description']).reset_index()
+
+    for owner in owners:
+        df[df.owner==owner] = df[df.owner==owner].sort(['transdate']).fillna(method='pad')
+
+    df = df.fillna(0)
+    droplevel(df)
+
+    return returnTable(df)
+
+
+def stockPricesData():
+
+    a = sqlqueries.sqlstocksprices()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    df = pd.pivot_table(df, index=['transdate','owner', 'FXRate'],values=["Price"],columns=['symbol']).reset_index()
+
+    for owner in owners:
+        df[df.owner==owner] = df[df.owner==owner].sort(['transdate']).fillna(method='pad')
+
+    df = df.fillna(0)
+
+    droplevel(df)
+
+    return returnTable(df)
+
+
+def budgetData():
+
+    a = sqlqueries.sqlbudget()
+
+    df = pd.read_sql(a, engine)
+
+    return returnTable(df)
+
+
+
+def NIFXdata():
+    ### returns net income data with fx
+
+    df = pd.read_sql_table('googlechartsmonthlynetincome', engine, parse_dates='Date')
+
+    return returnTable(df)
+
+
+def indtransactions(a, page, limit):
+
+    if a == "Joint":
+        b = ""
+    elif a == "Emma":
+        b = 'and bankaccounts.owner = "%s"' %'Emma'
+    else:
+        b = 'and bankaccounts.owner = "%s"' %'Dan'
+
+    a = sqlqueries.sqlindtransactions()
+    df = pd.read_sql(a %(b, limit, (page-1)*limit), engine, parse_dates='transdate')
+
+    return df.values.tolist(), df.columns.tolist()
+
+
+def stocktabledata():
+
+    a = sqlqueries.sqlStockTable()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    return returnTable(df)
+
+
+def accruals():
+
+    a = sqlqueries.accruals()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+    return returnTable(df)
+
+
+def currentbalancedata():
+
+    a = sqlqueries.sqlcurrentbalance()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    return returnTable(df)
+
+
+def sumstockdata():
+
+    a = sqlqueries.sqlSumStockTable()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    return returnTable(df)
+
+def sumstockPricesData():
+
+    a = sqlqueries.sqlSumStockData()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    df = pd.pivot_table(df, index=['transdate','owner', 'FXRate'],values=["Price"],columns=['symbol']).reset_index()
+
+    droplevel(df)
+
+    df2 = df.iloc[:,3:]
+    initial = df2.ix[0:1]
+    initial = initial.sum()
+    df2 = df2.divide(initial / 100)
+    df.iloc[:,3:] = df2
+
+    df = df.fillna(0)
+
+    return returnTable(df)
+
