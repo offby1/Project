@@ -90,6 +90,14 @@ def budgetData():
     return returnTable(df)
 
 
+def overallbudgetData():
+
+    a = sqlqueries.sqloverallbudget()
+
+    df = pd.read_sql(a, engine)
+
+    return returnTable(df)
+
 
 def NIFXdata():
     ### returns net income data with fx
@@ -153,13 +161,41 @@ def sumstockPricesData():
 
     droplevel(df)
 
-    df2 = df.iloc[:,3:]
-    initial = df2.ix[0:1]
+    df4 = df
+    df4 = df4.iloc[:2,3:]
+    df4 = pd.DataFrame(df4.sum())
+    df3 = df.iloc[:,3:]
+    initial = df3.ix[0:1]
     initial = initial.sum()
-    df2 = df2.divide(initial / 100)
+    df2 = df3.divide(initial / 100)
     df.iloc[:,3:] = df2
 
     df = df.fillna(0)
+    #print df4
+    #initial = pd.DataFrame(initial)
+    #print [returnTable(df), returnTable(df4)]
+    return returnTable(df), returnTable(df4)
+    #return returnTable(df)
+
+sumstockPricesData()
+def sumstockPricesOriginalData():
+
+    a = sqlqueries.sqlSumStockData()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    df = pd.pivot_table(df, index=['transdate','owner', 'FXRate'],values=["Price"],columns=['symbol']).reset_index()
+
+    df = df.fillna(0)
+
+    droplevel(df)
 
     return returnTable(df)
 
+
+def sumspendingdata():
+
+    a = sqlqueries.sqlSumSpendTable()
+
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    return returnTable(df)
