@@ -199,12 +199,49 @@ def sqlbudget():
            FROM
              transactions
              INNER JOIN bankaccounts ON bankaccounts.MintAccountName = transactions.accountname
-           WHERE Date2 = date('2015-09-30')
+           WHERE Date2 = date('2015-10-31')
            GROUP BY transactions.category, bankaccounts.Owner, Date2) AS T1
         ON T1.Date2 = Date1 AND Owner1 = T1.Owner2 AND Category1 = T1.Category2
-    WHERE Date1 = date('2015-09-30')) as T2
+    WHERE Date1 = date('2015-10-31')) as T2
     inner join fxrates on date(fxrates.FXDate) = T2.Date1;
     '''
+
+def sqloverallbudget():
+    return '''
+
+    SELECT
+      T2.Date1              AS transdate,
+      T2.Owner1             AS Owner,
+      fxrates.Rate          AS FXRate,
+      sum(T2.Budget1)            AS Budget,
+      sum(ifnull(T2.amount2, 0)) AS Actual
+    FROM
+      (SELECT DISTINCT
+         date(datestable.transdate, 'start of month', '+1 month', '-1 day') AS Date1,
+         budget.owner                                                       AS Owner1,
+         budget.categoryname                                                AS Category1,
+         budget.amount                                                      AS Budget1,
+         T1.amount2
+       FROM datestable
+         INNER JOIN budget
+
+         LEFT JOIN (
+                     SELECT
+                       date(transactions.transdate, 'start of month', '+1 month', '-1 day') AS Date2,
+                       bankaccounts.Owner                                                   AS Owner2,
+                       transactions.category                                                AS Category2,
+                       sum(transactions.amount) * -1                                        AS amount2
+                     FROM
+                       transactions
+                       INNER JOIN bankaccounts ON bankaccounts.MintAccountName = transactions.accountname
+                     WHERE Date2 = date('2015-10-31')
+                     GROUP BY transactions.category, bankaccounts.Owner, Date2) AS T1
+           ON T1.Date2 = Date1 AND Owner1 = T1.Owner2 AND Category1 = T1.Category2
+       WHERE Date1 = date('2015-10-31')) AS T2
+      INNER JOIN fxrates ON date(fxrates.FXDate) = T2.Date1
+    GROUP BY T2.Date1, T2.Owner1, fxrates.Rate
+    '''
+
 
 def sqlstockgain():
     return '''
@@ -458,4 +495,54 @@ def sqlSumStockData():
       INNER JOIN bankaccounts ON stockprices.accountname = bankaccounts.MintAccountName
     WHERE symbol != 'MoneyMarket' and date(stockprices.transdate) >= date(current_date,'-3 month')
     ORDER BY stockprices.transdate
+    '''
+
+
+def sqlSumStockOriginalData():
+    return '''
+
+    SELECT
+      stockprices.transdate,
+      bankaccounts.Owner AS owner,
+      fxrates.Rate       AS FXRate,
+      stockprices.symbol,
+      round((CASE WHEN bankaccounts.Currency = "USD"
+        THEN stockprices.price
+             ELSE stockprices.price / fxrates.Rate
+             END), 2)    AS "Price"
+    FROM stockprices
+      INNER JOIN fxrates ON (fxrates.FXDate) = (stockprices.transdate)
+      INNER JOIN bankaccounts ON stockprices.accountname = bankaccounts.MintAccountName
+    WHERE symbol != 'MoneyMarket' and date(stockprices.transdate) >= date(current_date,'-3 month')
+    ORDER BY stockprices.transdate
+    '''
+
+
+def sqlSumSpendTable():
+    return '''
+
+    SELECT
+      T1.monthdate AS transdate,
+      T1.Owner,
+      FX2.Rate,
+      min(T1.Spend, 5750),
+      max(5750 - T1.Spend, 0) as Budget,
+      max(0, T1.Spend - 5750) as Remaining
+
+    FROM
+      (SELECT
+         date(transactions.transdate, 'start of month', '+1 month', '-1 day') AS monthdate,
+         bankaccounts.Owner,
+         round(sum(CASE WHEN bankaccounts.Currency = "USD"
+           THEN transactions.amount
+                   ELSE transactions.amount / FX1.Rate
+                   END), 2) * -1                                              AS "Spend"
+
+       FROM transactions
+         INNER JOIN bankaccounts ON transactions.accountname = bankaccounts.MintAccountName
+         INNER JOIN fxrates AS FX1 ON transactions.transdate = FX1.FXDate
+         INNER JOIN categories ON categories.Category = transactions.category
+       WHERE monthdate >= date(current_date, '-6 month') AND bankaccounts.JointColumn = "Joint" AND categories.Spending
+       GROUP BY monthdate, bankaccounts.Owner) AS T1
+      INNER JOIN fxrates AS FX2 ON monthdate = date(FX2.FXDate)
     '''

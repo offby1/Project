@@ -145,14 +145,17 @@ var chart = function (div, data, divcol, firstTitle, secondTitle, sumcol, valSta
 
     sumcol === true ? this.addSumColumn() : void(0);
 
-    this.dataJoin = function () {
+    this.dataJoin = function (owner2) {
+        if (typeof owner2 === 'undefined') {
+            owner2 = GLOBALS.owner;
+        }
         var columns = this.dataTable.getNumberOfColumns();
         cols = [0];
         for (var i = 2; i < columns; i++) {
             cols.push(i);
         }
 
-        this.dataOwnerJoin = new google.visualization.data.join(this.dataTable, GLOBALS.owner, 'inner', [
+        this.dataOwnerJoin = new google.visualization.data.join(this.dataTable, owner2, 'inner', [
             [1, 0]
         ], cols, []);
 

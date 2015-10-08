@@ -2,6 +2,8 @@
 window.GLOBALS = {
     greyfont: '#9E9E9E',
     chartcolours: ['#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#607D8B'],
+    chartcoloursfaded: ['#4FC3F7', '#4DD0E1', '#4DB6AC', '#81C784', '#AED581', '#DCE775', '#90A4AE'],
+    chartcolourswhite: ['#B3E5FC', '#B2EBF2', '#B2DFDB', '#C8E6C9', '#DCEDC8', '#F0F4C3', '#CFD8DC'],
     formatdate: new google.visualization.DateFormat({pattern: 'MMM yyyy'}),
     formatinddate: new google.visualization.DateFormat({pattern: 'MMM dd, yyyy'}),
     formatamount: new google.visualization.NumberFormat({
@@ -26,7 +28,8 @@ window.GLOBALS = {
         ['Emma']
     ]),
     grid: $('.mdl-grid'),
-    cache: {}
+    cache: {},
+    charts: []
 
 };
 
@@ -36,7 +39,6 @@ $(document).ready(function() {
     $('#CurrencyButton').click(CurrencyButtonClick);
     loadHomePage();
 
-
 });
 
 
@@ -44,34 +46,13 @@ function loadHomePage() {
 
     GLOBALS.grid.empty(); /// clears all charts on current page
 
-    $.getJSON($SCRIPT_ROOT + '/currentbalance', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/balances', {}, function (data) { initializeBalanceChart(data.balanceData, data.currentBalanceData); });
 
-        initializeCurrentBalanceTable(data.currentBalanceData);
+    $.getJSON($SCRIPT_ROOT + '/overallbudget', {}, function (data) { initializeBudgetChart(data.overallbudgetData); });
 
-    });
+    $.getJSON($SCRIPT_ROOT + '/currentspending', {}, function (data) { initializeSpendingChart(data.spendingdata); });
 
-
-    $.getJSON($SCRIPT_ROOT + '/budget', {}, function (data) {
-
-        initializeBudgetChart2(data.budgetData);
-
-    });
-
-    $.getJSON($SCRIPT_ROOT + '/sumStockTable', {}, function (data) {
-
-        initializeSumStockTable(data.sumStockTableData);
-
-    });
-    $.getJSON($SCRIPT_ROOT + '/balances', {}, function (data) {
-
-        initializeBalanceChart2(data.balanceData);
-
-    });
-    $.getJSON($SCRIPT_ROOT + '/sumstockPrices', {}, function (data) {
-
-        initializeStockPrices2(data.sumstocksPricesData);
-
-        });
+    $.getJSON($SCRIPT_ROOT + '/stocks', {}, function (data) { initializeStockChart(data.sumStockTableData, data.sumstocksPricesData[0], data.sumstocksPricesData[1]); });
 
     return false;
 }

@@ -109,6 +109,7 @@ html, body {
 
 .demo-content {
   max-width: 1080px;
+  padding: 16px;
 }
 
 .demo-charts {
@@ -173,6 +174,7 @@ _:-ms-input-placeholder, :root .demo-graph {
   -webkit-align-content: flex-start;
       -ms-flex-line-pack: start;
           align-content: flex-start;
+    -webkit-user-select: none;
 }
 .demo-cards .demo-separator {
   height: 32px;
@@ -196,14 +198,23 @@ _:-ms-input-placeholder, :root .demo-graph {
   font-size: 1em;
 }
 
-#currentBalanceDiv, #sumStockTableDiv, #sumBudgetDiv{
+#cardbalancesDiv, #cardstockPricesDiv2, #cardbudgetChartDiv, #cardmonthlySpendDiv {
     position: relative;
+    border-radius: 2px;
+    height: 300px;
 }
-#chartbalancesDiv2, #chartstockPricesDiv2, #chartbudgetChartDiv2 {
+#chartbalancesDiv, #chartstockPricesDiv2, #chartbudgetChartDiv, #chartmonthlySpendDiv {
     position: relative;
-    height: 372px;
+    height: 248px;
     width: 100%;
+    border-radius: 2px;
+    z-index: 800;
+    background: transparent;
+    cursor: default;
+}
 
+.mdl-card__actions {
+    z-index: 1000;
 }
 
 #todayBalance {
@@ -212,15 +223,44 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 #test {
     position: absolute;
-    z-index: 900;
+    z-index: 700;
     height: 100%;
     width: 100%;
+    cursor: default;
+    -webkit-user-select: none;
+
 }
+
+#tooltipbalancesDiv, #tooltipstockPricesDiv2 {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 14px;
+    color: #757575;
+    background-color: white;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    width: 125px;
+    padding: 3px 8px 1px 8px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Roboto2', 'Helvetica', sans-serif;
+    fill-opacity: 0.2;
+    -moz-box-shadow: 0px 10px 14px -7px #9E9E9E;
+    -webkit-box-shadow: 0px 10px 14px -7px #9E9E9E;
+    box-shadow: 0px 10px 14px -7px #9E9E9E;
+    opacity: 0;
+
+}
+
 
 #titletext {
     align-items: flex-end;
     display: flex;
     padding: 0 0 0 16px;
+    font-size: 15px;
 }
 
 .demo-updates .mdl-card__title {
@@ -351,7 +391,7 @@ _:-ms-input-placeholder, :root .demo-graph {
     -webkit-user-select: none;
     -webkit-font-smoothing: antialiased;
     color: #757575;
-    font-size: 16px;
+    font-size: 20px;
     opacity = "null";
     fill = "#9E9E9E";
     dx = "0px";
@@ -362,7 +402,7 @@ _:-ms-input-placeholder, :root .demo-graph {
     -webkit-user-select: none;
     -webkit-font-smoothing: antialiased;
     color: #9E9E9E;
-    font-size: 14px;
+    font-size: 16px;
     opacity = "null";
     fill = "#9E9E9E";
     dx = "0px";
@@ -471,7 +511,7 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 #title {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 25px);
     left: 50%;
     line-height: 24px;
     font-weight: 300;
@@ -487,7 +527,7 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 }
 
-#SPENT {
+#SPENT, #BUDGET {
     font-weight: 400;
     color: rgba(0, 0, 0, .54);
     font-size: 13px;
@@ -496,7 +536,7 @@ _:-ms-input-placeholder, :root .demo-graph {
     width: 90%;
 }
 
-#SPENTV {
+#SPENTV, #BUDGETV {
     font-size: 18px;
     line-height: 18px;
     overflow: hidden;

@@ -1,6 +1,3 @@
-/**
- * Created by emmaachberger on 8/29/15.
- */
 
 
 function initializeNetIncomeChart(netincomedata) {
@@ -23,7 +20,7 @@ function initializeNetIncomeChart(netincomedata) {
 }
 
 
-function initializeMonthlySpend(spendingdata) {
+function initializeMonthlySpend3(spendingdata) {
 
     monthlySpend = new chart(
         div = 'monthlySpendDiv',
@@ -76,7 +73,6 @@ function initializeBalanceChart(balanceData) {
 }
 
 
-
 function initializeStocksChart(stocksData) {
 
     stocks = new chart(
@@ -126,7 +122,7 @@ function initializeStockPrices(stockPriceData) {
 }
 
 
-function initializeBudgetChart(budgetData) {
+function initializeBudgetChart3(budgetData) {
 
     budgetChart = new chart(
         div = 'budgetChartDiv',
@@ -239,7 +235,7 @@ function initializeStockTable(stockTableData) {
 
         stockTable.dataOwnerJoin = stockTable.dataJoin();
         stockTable.dataView = stockTable.dataOwnerGroup();
-        stockTable.dataView.removeColumns(0,1);
+        stockTable.dataView.removeColumns(0, 1);
         GLOBALS.format4decimals.format(stockTable.dataView, 1);
         GLOBALS.formatdecimals.format(stockTable.dataView, 2);
         GLOBALS.formatdecimals.format(stockTable.dataView, 3);
@@ -251,8 +247,6 @@ function initializeStockTable(stockTableData) {
     stockTable.redraw()
 
 }
-
-
 
 
 function initializeNIFXChart(NIFXdata) {
@@ -414,8 +408,6 @@ function manipulateNIFXData(data) {
 }
 
 
-
-
 function indtranstable(x, y) {
 
     var transdata = new google.visualization.DataTable();
@@ -445,7 +437,7 @@ function indtranstable(x, y) {
     }
 
     var view = new google.visualization.DataView(transdata);
-    view.hideColumns([6,7,8]); // hides account type, currency and FX rate
+    view.hideColumns([6, 7, 8]); // hides account type, currency and FX rate
 
     var visind = new table.MyTable(document.getElementById('transactions_table_div'));
 
@@ -453,7 +445,6 @@ function indtranstable(x, y) {
 
 
 }
-
 
 
 function accrualsTable(data) {
@@ -487,16 +478,19 @@ function accrualsTable(data) {
 }
 
 
-function initializeCurrentBalanceTable(data) {
+/**
+ * Created by dangoodburn on 10/3/15.
+ */
 
-    currentBalance = new chart(
+function initializeCurrentBalanceTable5(data) {
+
+    currentBalance = new chartV2(
         div = 'currentBalanceDiv',
         data = data,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Balance',
         secondTitle = "Compared to one month prior",
         sumcol = false
-
     );
 
     var todayBalance = 0;
@@ -507,27 +501,31 @@ function initializeCurrentBalanceTable(data) {
     var formattedDate = d.toDateString().slice(4);
 
     currentBalance.htmldiv = '\
-    <div class="demo-graphs mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp" style="padding:0px" id=' + 'currentBalanceDiv' + '>\
+    <div class="demo-graphs mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--2dp" style="padding:0px; border-radius: 2px;" id=' + 'currentBalanceDiv' + '>\
     <div class="demo-graphs" id=test style="padding:0px">\
         <div class="firstTitle" style="padding:16px 0 0 16px">\
             Net Worth\
           </div>\
-          \<div class="secondTitle" style="padding:0 0 0 16px">'+ formattedDate + '\
+          \<div class="secondTitle" style="padding:0 0 0 16px">' + formattedDate + '\
           </div>\
           <div class="mdl-card__title mdl-card--expand">\
             <h2 class="mdl-card__title-text" id=todayBalance>' + todayBalance + '</h2>\
           </div>\
           <div class="mdl-card__supporting-text">\
-            <div>ONE MONTH AGO:</div></br><span id=oldBalance>' + oldBalance + '</span></br></br><div>CHANGE:</div></br><span id=change>'+ change +'\
+            <div>ONE MONTH AGO:</div><span id=oldBalance>' + oldBalance + '</span></br></br><div>CHANGE:</div><span id=change>' + change + '\
           </span></div>\
           <div class="mdl-card__actions mdl-card--border">\
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/balances/" onclick="loadBalancesPage()">\
-              View Balance Details\
-            </a>\
+              <span>\
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/balances/" onclick="loadBalancesPage()">\
+                  View Balance Details\
+                </a>\
+              </span>\
+              <span id="accountBalance" style="float: right;">\
+              </span>\
           </div>\
         </div>\
+        <div id="chartbalancesDiv2"</div>\
     </div>';
-
 
 
     GLOBALS.grid.append(currentBalance.htmldiv);
@@ -536,22 +534,22 @@ function initializeCurrentBalanceTable(data) {
 
         currentBalance.dataOwnerJoin = currentBalance.dataJoin();
         currentBalance.dataView = currentBalance.dataOwnerGroup();
-        var todayBalance = currentBalance.dataView.getFormattedValue(1,1);
-        var oldBalance = currentBalance.dataView.getFormattedValue(0,1);
-        var todayBalanceNF = currentBalance.dataView.getValue(1,1);
-        var oldBalanceNF = currentBalance.dataView.getValue(0,1);
+        var todayBalance = currentBalance.dataView.getFormattedValue(1, 1);
+        var oldBalance = currentBalance.dataView.getFormattedValue(0, 1);
+        var todayBalanceNF = currentBalance.dataView.getValue(1, 1);
+        var oldBalanceNF = currentBalance.dataView.getValue(0, 1);
 
         var changeNF = todayBalanceNF - oldBalanceNF;
 
         change = changeNF.formatMoney();
 
         $('#todayBalance').text(todayBalance);
-        $('#todayBalance').css("color","#4CAF50");
+        $('#todayBalance').css("color", "#4CAF50");
         $('#oldBalance').text(oldBalance);
-        $('#oldBalance').css("color","#4CAF50");
+        $('#oldBalance').css("color", "#4CAF50");
         $('#change').text(change);
 
-        changeNF >= 0 ? $('#change').css("color","#4CAF50") : $('#change').css("color","#EF5350");
+        changeNF >= 0 ? $('#change').css("color", "#4CAF50") : $('#change').css("color", "#EF5350");
 
 
     };
@@ -559,54 +557,88 @@ function initializeCurrentBalanceTable(data) {
     currentBalance.redraw()
 }
 
-function initializeBalanceChart2(balanceData) {
+function initializeBalanceChart5(balanceData) {
 
     balances2 = new chart(
         div = 'balancesDiv2',
         data = balanceData,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Balances',
         secondTitle = 'Accounts Over Time',
-        sumcol = true,
+        sumcol = false,
         valStartCol = 3,
         categoryEndCol = 2,
-        chartHeight = '378px'
+        chartHeight = '200px'
     );
 
     balances2.chartWrapper.setChartType('AreaChart');
-    balances2.chartWrapper.setOption('seriesType', 'area');
-    balances2.chartWrapper.setOption('lineWidth', 0);
-    //balances2.chartWrapper.setOption('lineDashStyle', [1,10000000]);
+    balances2.chartWrapper.setOption('lineWidth', 0.05);
     balances2.chartWrapper.setOption('areaOpacity', 0.2);
-    balances2.chartWrapper.setOption('series.5.type', 'line');
     balances2.chartWrapper.setOption('animation.duration', 750);
     balances2.chartWrapper.setOption('tooltip.trigger', 'none');
     balances2.chartWrapper.setOption('hAxis.gridlines.count', 0);
     balances2.chartWrapper.setOption('vAxis.gridlines.count', 0);
     balances2.chartWrapper.setOption('chartArea.left', 0);
     balances2.chartWrapper.setOption('chartArea.width', '100%');
-    balances2.chartWrapper.setOption('chartArea.height', 311);
-    balances2.chartWrapper.setOption('vAxis.baselineColor','#FAFAFA');
+    balances2.chartWrapper.setOption('chartArea.height', '100%');
+    balances2.chartWrapper.setOption('vAxis.baselineColor', '#E1F5FE');
+    balances2.chartWrapper.setOption('backgroundColor.fill', 'transparent');
+    balances2.chartWrapper.setOption('focusTarget', 'datum');
+    balances2.chartWrapper.setOption('crosshair.opacity', 0.3);
+    balances2.chartWrapper.setOption('crosshair.trigger', 'both');
+    //balances2.chartWrapper.setOption('tooltip.ignoreBounds',true);
 
-    balances2.redraw = function() {
+    balances2.redraw = function () {
 
         this.dataOwnerJoin = this.dataJoin();
         this.dataView = this.dataOwnerGroup();
+        GLOBALS.formatdate.format(this.dataView, 0);
         this.chartWrapper.setDataTable(this.dataView);
         this.chartWrapper.draw();
 
 
-
     };
 
-    $('#currentBalanceDiv').append('<div id="chartbalancesDiv2"</div>');
+    //$('#currentBalanceDiv').append('<div id="chartbalancesDiv2"</div>');
+
+    google.visualization.events.removeAllListeners(balances2.chartWrapper);
+    var runOnce = google.visualization.events.addListener(balances2.chartWrapper, 'ready', function () {
+        // remove the listener so that it doesn't stack up multiple events
+        google.visualization.events.removeListener(runOnce);
+
+        google.visualization.events.addListener(balances2.chartWrapper.getChart(), 'onmouseover', displayBalance);
+        google.visualization.events.addListener(balances2.chartWrapper.getChart(), 'onmouseout', removeBalance);
+
+    });
 
     balances2.redraw();
-
+    google.visualization.events.removeAllListeners(balances2.chartWrapper);
 
 }
 
+function removeBalance5() {
 
+    $('#accountBalance').html('');
+    //$('#accountBalance').css('background-color','white');
+    $('#accountBalance').css('border-width', '0');
+
+}
+
+function displayBalance5(e) {
+
+    var a = balances2.dataView.getFormattedValue(e.row, e.column);
+    var b = balances2.dataView.getFormattedValue(e.row, 0);
+    var c = balances2.dataView.getColumnLabel(e.column);
+
+    d = '<div>' + b + '</br>' + c + ': <span style="font-weight: bold">' + a + '</span></div>';
+    $('#accountBalance').html(d);
+    //$('#accountBalance').css('background-color','#FAFAFA');
+    $('#accountBalance').css('border-color', GLOBALS.chartcolours[e.column]);
+    $('#accountBalance').css('border-width', '2px');
+    //alert($(".google-visualization-tooltip").prop('style'));
+    //$('#accountBalance').attr('style', function(i,s) { return s + 'background-color: green !important;' });
+
+}
 
 
 function initializeSumStockTable2(data) {
@@ -614,14 +646,13 @@ function initializeSumStockTable2(data) {
     sumStock = new chart(
         div = 'sumStockTableDiv',
         data = data,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Stocks',
         secondTitle = "",
         sumcol = false
-
     );
 
-    GLOBALS.grid.append('<div class="demo-graphs mdl-cell mdl-cell--4-col" style="padding:0px 0px"><div id="sumStockTableDiv" style="width:100%; "></div></div>');
+    GLOBALS.grid.append('<div class="demo-graphs mdl-cell mdl-cell--6-col" style="padding:0px 0px"><div id="sumStockTableDiv" style="width:100%; "></div></div>');
     var sumStockTable = new table.MyTable(document.getElementById('sumStockTableDiv'));
 
     sumStock.redraw = function () {
@@ -633,7 +664,8 @@ function initializeSumStockTable2(data) {
 
     };
 
-    sumStock.redraw()
+    sumStock.redraw();
+    //google.visualization.events.removeAllListeners(sumStock.chartWrapper);
 }
 
 function initializeSumStockTable(data) {
@@ -641,46 +673,48 @@ function initializeSumStockTable(data) {
     sumStock = new chart(
         div = 'sumStockTableDiv',
         data = data,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Stocks',
         secondTitle = "",
         sumcol = false
-
     );
-
+    google.visualization.events.removeAllListeners(sumStock.chartWrapper);
     var todayStocks = 0;
     var totalStocks = 0;
 
 
-
     sumStock.htmldiv = '\
-    <div class="demo-graphs mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp" style="padding:0px" id=' + 'sumStockTableDiv' + '>\
+    <div class="demo-graphs mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--2dp" style="padding:0px" id=' + 'sumStockTableDiv' + '>\
     <div class="demo-graphs" id=test style="padding:0px">\
         <div class="firstTitle" style="padding:16px 0 0 16px">\
             Stocks\
           </div>\
-          <div class="secondTitle" style="padding:0 0 0 16px">'+ 'Performance' + '\
+          <div class="secondTitle" style="padding:0 0 0 16px">' + 'Performance' + '\
           </div>\
           <div class="mdl-card__supporting-text mdl-card--expand" id=titletext>\
             TODAY\'S GAIN/LOSS:\
           </span></div>\
-          <div class="mdl-card__title">\
+          <div class="mdl-card__title" style="padding-top: 0">\
             <h2 class="mdl-card__title-text" id=todayStocks>' + todayStocks + '</h2>\
           </div>\
           \<div class="mdl-card__supporting-text" id=titletext>\
             OVERALL GAIN/LOSS:\
           </span></div>\
-          <div class="mdl-card__title">\
+          <div class="mdl-card__title" style="padding-top: 0">\
             <h2 class="mdl-card__title-text" id=totalStocks>' + totalStocks + '</h2>\
           </div>\
           <div class="mdl-card__actions mdl-card--border">\
+            <span>\
             <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/stocks/" onclick="loadStocksPage()">\
               View Stock Details\
             </a>\
+            </span>\
+              <span id="stockdetails" style="float: right;">\
+              </span>\
           </div>\
         </div>\
+        <div id="chartstockPricesDiv2"></div>\
     </div>';
-
 
 
     GLOBALS.grid.append(sumStock.htmldiv);
@@ -689,54 +723,71 @@ function initializeSumStockTable(data) {
 
         sumStock.dataOwnerJoin = sumStock.dataJoin();
         sumStock.dataView = sumStock.dataOwnerGroup();
-        var todayStocks = sumStock.dataView.getFormattedValue(0,1);
-        var todayStocksNF = sumStock.dataView.getValue(0,1);
-        var totalStocks = sumStock.dataView.getFormattedValue(0,2);
-        var totalStocksNF = sumStock.dataView.getValue(0,2);
+        var todayStocks = sumStock.dataView.getFormattedValue(0, 1);
+        var todayStocksNF = sumStock.dataView.getValue(0, 1);
+        var totalStocks = sumStock.dataView.getFormattedValue(0, 2);
+        var totalStocksNF = sumStock.dataView.getValue(0, 2);
 
         $('#todayStocks').text(todayStocks);
-        todayStocksNF >= 0 ? $('#todayStocks').css("color","#4CAF50") : $('#todayStocks').css("color","#EF5350");
+        todayStocksNF >= 0 ? $('#todayStocks').css("color", "#4CAF50") : $('#todayStocks').css("color", "#EF5350");
         $('#totalStocks').text(totalStocks);
-        totalStocksNF >= 0 ? $('#totalStocks').css("color","#4CAF50") : $('#totalStocks').css("color","#EF5350");
+        totalStocksNF >= 0 ? $('#totalStocks').css("color", "#4CAF50") : $('#totalStocks').css("color", "#EF5350");
 
 
     };
 
-    sumStock.redraw()
+    sumStock.redraw();
+
 }
 
 
-function initializeStockPrices2(stockPriceData) {
+
+
+function initializeStockPrices2(stockPriceData, originalStockPrice) {
 
     stockPrices2 = new chart(
         div = 'stockPricesDiv2',
         data = stockPriceData,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Stock Prices',
-        secondTitle = 'Over Time',
+        secondTitle = '',
         sumcol = false
     );
+    google.visualization.events.removeAllListeners(stockPrices2.chartWrapper);
+    stockPrices2.originalStockPrice = originalStockPrice;
 
     stockPrices2.chartWrapper.setChartType('LineChart');
     stockPrices2.chartWrapper.setOption('interpolateNulls', false);
     stockPrices2.chartWrapper.setOption('hAxis.gridlines.count', 0);
     stockPrices2.chartWrapper.setOption('vAxis.gridlines.count', 0);
     stockPrices2.chartWrapper.setOption('chartArea.left', 0);
-    stockPrices2.chartWrapper.setOption('chartArea.top', 40);
+    stockPrices2.chartWrapper.setOption('chartArea.top', 0);
     stockPrices2.chartWrapper.setOption('chartArea.width', '100%');
-    stockPrices2.chartWrapper.setOption('chartArea.height', 271);
-    stockPrices2.chartWrapper.setOption('vAxis.baselineColor','#FAFAFA');
-    stockPrices2.chartWrapper.setOption('lineWidth',.5);
+    stockPrices2.chartWrapper.setOption('chartArea.height', 247);
+    stockPrices2.chartWrapper.setOption('vAxis.baselineColor', '#FAFAFA');
+    stockPrices2.chartWrapper.setOption('lineWidth', .5);
+    stockPrices2.chartWrapper.setOption('backgroundColor.fill', 'transparent');
+    stockPrices2.chartWrapper.setOption('tooltip.trigger', 'none');
+    stockPrices2.chartWrapper.setOption('crosshair.trigger', 'both');
+    stockPrices2.chartWrapper.setOption('focusTarget', 'datum');
+    stockPrices2.chartWrapper.setOption('crosshair.opacity', 0.3);
+    stockPrices2.chartWrapper.setOption('vAxis.viewWindowMode', 'pretty');
+    //vAxis: {textStyle: {color: GLOBALS.greyfont}, format: 'short', viewWindowMode: 'maximized'},
     //stockPrices2.chartWrapper.setOption('vAxis.viewWindow.min', 60);
     //stockPrices2.chartWrapper.setOption('vAxis.viewWindow.max', 120);
 
-    stockPrices2.redraw = function() {
+    stockPrices2.redraw = function () {
 
         this.dataOwnerJoin = this.dataJoin();
         this.dataView = this.dataOwnerGroup();
+        GLOBALS.formatinddate.format(this.dataView, 0);
+        for (var i = 1; i < this.dataView.getNumberOfColumns(); i++) {
+            GLOBALS.format4decimals.format(this.dataView, i);
+        }
+
         this.chartWrapper.setDataTable(this.dataView);
 
-        for (var i = this.dataView.getNumberOfColumns() - 1; i>0; i--) {
+        for (var i = this.dataView.getNumberOfColumns() - 1; i > 0; i--) {
 
             var range = this.dataView.getColumnRange(i);
             if (range.max === 0 & range.min === 0) {
@@ -747,16 +798,49 @@ function initializeStockPrices2(stockPriceData) {
         this.chartWrapper.draw();
 
 
-
     };
 
-    $('#sumStockTableDiv').append('<div id="chartstockPricesDiv2"></div>');
+    google.visualization.events.removeAllListeners(stockPrices2.chartWrapper);
+    var runOnce = google.visualization.events.addListener(stockPrices2.chartWrapper, 'ready', function () {
+        // remove the listener so that it doesn't stack up multiple events
+        google.visualization.events.removeListener(runOnce);
+
+        google.visualization.events.addListener(stockPrices2.chartWrapper.getChart(), 'onmouseover', displayStockDetails);
+        google.visualization.events.addListener(stockPrices2.chartWrapper.getChart(), 'onmouseout', removeStockDetails);
+
+    });
 
     stockPrices2.redraw();
+    google.visualization.events.removeAllListeners(stockPrices2.chartWrapper);
+
+
+
+function removeStockDetails() {
+
+    $('#stockdetails').html('');
+    //$('#accountBalance').css('background-color','white');
+    $('#stockdetails').css('border-width', '0');
+
+}
+
+function displayStockDetails(e) {
+
+    console.log(stockPrices2.originalStockPrice[1]);
+    console.log(e.column);
+    var a = (stockPrices2.dataView.getValue(e.row, e.column) * stockPrices2.originalStockPrice[1][e.column - 1] / 100).toFixed(2);
+    var b = stockPrices2.dataView.getFormattedValue(e.row, 0);
+    var c = stockPrices2.dataView.getColumnLabel(e.column);
+    d = '<div>' + b + '</br>' + c + ': <span style="font-weight: bold">' + a + '</span></div>';
+    $('#stockdetails').html(d);
+    $('#stockdetails').css('border-color',GLOBALS.chartcolours[e.column]);
+    $('#stockdetails').css('border-width', '2px');
+
 
 }
 
 
+
+}
 
 
 function initializeBudgetChart2(budgetData) {
@@ -764,11 +848,11 @@ function initializeBudgetChart2(budgetData) {
     budgetChart = new chart(
         div = 'budgetChartDiv',
         data = budgetData,
-        divcol = 4,
+        divcol = 6,
         firstTitle = 'Budget',
-        secondTitle = 'Month to Date',
+        secondTitle = '',
         sumcol = false,
-        valStartCol = 4,
+        valStartCol = 3,
         categoryEndCol = 2,
         budgetSummary = '<h2 id="title"></h2>'
     );
@@ -803,15 +887,18 @@ function initializeBudgetChart2(budgetData) {
     budgetChart.chartWrapper.setOption('titleTextStyle.color', '#9E9E9E');
     budgetChart.chartWrapper.setOption('titleTextStyle.fontName', 'Roboto');
     budgetChart.chartWrapper.setOption('titleTextStyle.fontSize', '14');
-    budgetChart.chartWrapper.setOption('chartArea.top', 37);
-    budgetChart.chartWrapper.setOption('chartArea.width', '85%');
-    budgetChart.chartWrapper.setOption('chartArea.height', '80%');
+    budgetChart.chartWrapper.setOption('chartArea.top', 15);
+    budgetChart.chartWrapper.setOption('chartArea.width', 218);
+    budgetChart.chartWrapper.setOption('chartArea.height', 218);
+    budgetChart.chartWrapper.setOption('backgroundColor.fill', 'transparent');
 
     //GLOBALS.grid.append(budgetChart.escapeHtml(budgetChart.budgetCharthtml));
     $('#sumBudgetDiv').append('<div id=chartbudgetChartDiv2></div>');
     budgetChart.chartWrapper.setDataTable(this.dataView);
     budgetChart.chartWrapper.setContainerId('chartbudgetChartDiv2');
     budgetChart.redraw();
+    google.visualization.events.removeAllListeners(budgetChart.chartWrapper);
+
 
 }
 
@@ -819,12 +906,12 @@ function initializeSumBudget(budgetChart) {
 
 
     budgetChart.htmldiv = '\
-    <div class="demo-graphs mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp" style="padding:0px" id=' + 'sumBudgetDiv' + '>\
+    <div class="demo-graphs mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--2dp" style="padding:0px" id=' + 'sumBudgetDiv' + '>\
     <div class="demo-graphs" id=test style="padding:0px">\
         <div class="firstTitle" style="padding:16px 0 0 16px">\
             Budget\
           </div>\
-          <div class="secondTitle" style="padding:0 0 0 16px">'+ 'Month to Date' + '\
+          <div class="secondTitle" style="padding:0 0 0 16px">' + 'Month to Date' + '\
           </div>\
           <h2 id="title"></h2>\
           <div class="mdl-card__supporting-text mdl-card--expand" id=titletext>\
@@ -838,8 +925,129 @@ function initializeSumBudget(budgetChart) {
     </div>';
 
 
-
     GLOBALS.grid.append(budgetChart.htmldiv);
 
+
+}
+
+
+function initializeMonthlySpend2(spendingdata) {
+
+    monthlySpend = new chart(
+        div = 'monthlySpendDiv',
+        data = spendingdata,
+        divcol = 6,
+        firstTitle = 'Spending',
+        secondTitle = 'Monthly Expenses'
+    );
+
+    monthlySpend.htmldiv2 = '\
+    <div class="demo-graphs mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--2dp" style="padding:0px; border-radius: 2px;" id=' + 'currentSpendingDiv' + '></div>';
+
+
+    monthlySpend.htmldiv = '\
+    <div class="demo-graphs mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--2dp" style="padding:0px; border-radius: 2px;" id=' + 'currentSpendingDiv' + '>\
+        <div class="demo-graphs" id=test style="padding:0px">\
+            <div class="firstTitle" style="padding:16px 0 0 16px">\
+                Spending\
+              </div>\
+              <div class="secondTitle" id="secondDate" style="padding:0 0 0 16px">' + '' + '\
+              </div>\
+              <div class="mdl-card__title mdl-card--expand">\
+                <h2 class="mdl-card__title-text" id=selectedmonthspend>' + 0 + '</h2>\
+              </div>\
+              <div class="mdl-card__supporting-text">\
+                <div>GOAL:</div><span id=goalSpend>' + 0 + '</span></br></br><div>REMAINING:</div><span id=remaining>' + 0 + '\
+              </span></div>\
+              <div class="mdl-card__actions mdl-card--border">\
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/spending/" onclick="loadSpendingPage()">\
+                  View Spending Details\
+                </a>\
+              </div>\
+            </div>\
+        <div id="chartspendingDiv2"</div>\
+    </div>';
+
+    monthlySpend.chartWrapper.setContainerId('chartspendingDiv2');
+
+    GLOBALS.grid.append(monthlySpend.htmldiv);
+
+    monthlySpend.chartWrapper.setChartType('ColumnChart');
+    monthlySpend.chartWrapper.setOption('vAxis.minValue', 0);
+    monthlySpend.chartWrapper.setOption('vAxis.minValue', 0);
+    monthlySpend.chartWrapper.setOption('dataOpacity', 1);
+    monthlySpend.chartWrapper.setOption('colors', ['#81C784', '#E8F5E9', '#EF9A9A']);
+    monthlySpend.chartWrapper.setOption('tooltip.trigger', 'none');
+    monthlySpend.chartWrapper.setOption('hAxis.gridlines.count', 0);
+    monthlySpend.chartWrapper.setOption('vAxis.gridlines.count', 0);
+    monthlySpend.chartWrapper.setOption('chartArea.left', 100);
+    monthlySpend.chartWrapper.setOption('chartArea.top', 20);
+    monthlySpend.chartWrapper.setOption('chartArea.width', '100%');
+    monthlySpend.chartWrapper.setOption('chartArea.height', '100%');
+    monthlySpend.chartWrapper.setOption('backgroundColor.fill', 'transparent');
+    monthlySpend.chartWrapper.setOption('vAxis.baselineColor', '#E0E0E0');
+
+
+    monthlySpend.redraw = function () {
+
+        this.dataOwnerJoin = this.dataJoin(google.visualization.arrayToDataTable([
+            ['Owner'],
+            ['Dan'],
+            ['Emma']
+        ]));
+        this.dataView = this.dataOwnerGroup();
+
+        this.chartWrapper.setDataTable(this.dataView);
+
+
+        google.visualization.events.removeAllListeners(monthlySpend.chartWrapper);
+        var runOnce = google.visualization.events.addListener(monthlySpend.chartWrapper, 'ready', function () {
+            // remove the listener so that it doesn't stack up multiple events
+            google.visualization.events.removeListener(runOnce);
+
+            google.visualization.events.addListener(monthlySpend.chartWrapper.getChart(), 'onmouseover', changeNumbers);
+
+
+        });
+
+        this.chartWrapper.draw();
+        initialChange();
+    };
+
+    //$('#currentSpendingDiv').append('<div id="chartspendingDiv2"</div>');
+
+
+    monthlySpend.redraw();
+
+
+    function changeNumbers(e) {
+
+        changeNumbers2(e.row);
+    }
+
+    function initialChange() {
+
+        changeNumbers2(monthlySpend.dataView.getNumberOfRows() - 1);
+    }
+
+    function changeNumbers2(e) {
+        spend = monthlySpend.dataView.getValue(e, 1);
+        goal = monthlySpend.dataView.getValue(e, 2);
+        overspend = monthlySpend.dataView.getValue(e, 3);
+        totalspend = spend + overspend;
+        revisedGoal = spend + goal;
+        $('#selectedmonthspend').text(totalspend.formatMoney());
+        $('#selectedmonthspend').css("color", "#4CAF50");
+        $('#goalSpend').text(revisedGoal.formatMoney());
+        $('#goalSpend').css("color", "#4CAF50");
+
+        value = revisedGoal - totalspend;
+        formattedValue = value.formatMoney();
+        $('#remaining').text(formattedValue);
+        value >= 0 ? $('#remaining').css("color", "#4CAF50") : $('#remaining').css("color", "#EF5350");
+        GLOBALS.formatdate.format(monthlySpend.dataView, 0);
+        $('#secondDate').text(monthlySpend.dataView.getFormattedValue(e, 0));
+
+    };
 
 }

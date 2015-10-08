@@ -93,36 +93,11 @@ function getMinOfArray(numArray) {
 
 function redrawCharts() {
 
-    $('#balancesDiv').length > 0 ? balances.redraw() : void(0);
+    GLOBALS.charts.forEach(function(value) {
 
-    $('#balancetablediv').length > 0 ? balances.createEndingTable() : void(0);
+        value[0].redraw();
 
-    $('#monthlySpendDiv').length > 0 ? monthlySpend.redraw() : void(0);
-
-    $('#netIncomeDiv').length > 0 ? NI.redraw() : void(0);
-
-    $('#stocksDiv').length > 0 ? stocks.redraw() : void(0);
-
-    $('#stockPricesDiv').length > 0 ? stockPrices.redraw() : void(0);
-
-    $('#chartbudgetChartDiv').length > 0 ? budgetChart.redraw() : void(0);
-
-    $('#chartindBudgetChartDiv').length > 0 ? indBudgetChart.redraw() : void(0);
-
-    $('#NIFXDiv').length > 0 ? NIFX.redraw() : void(0);
-
-    $('#stockTableDiv').length > 0 ? stockTable.redraw() : void(0);
-
-    $('#currentBalanceDiv').length > 0 ? currentBalance.redraw() : void(0);
-    $('#currentBalanceDiv').length > 0 ? balances2.redraw() : void(0);
-
-    $('#sumStockTableDiv').length > 0 ? sumStock.redraw() : void(0);
-    $('#sumStockTableDiv').length > 0 ? stockPrices2.redraw() : void(0);
-
-    $('#chartbudgetChartDiv2').length > 0 ? budgetChart.redraw() : void(0);
-
-
-
+    })
 }
 
 
@@ -133,6 +108,14 @@ function joint(joint) {
         return joint;
     }
 }
+
+
+function escapeHtml(div) {
+    if (div == null)
+        return '';
+    return div.replace(/&/g, '&').replace(/</g, '<')
+        .replace(/>/g, '>').replace(/"/g, '"');
+};
 
 
 Number.prototype.formatMoney = function(c, d, t){
@@ -147,3 +130,14 @@ Number.prototype.formatMoney = function(c, d, t){
 
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + l;
      };
+
+
+function formatMoneyColor(div, number) {
+
+    numberFormatted = number.formatMoney();
+    $(div).text(numberFormatted);
+    number >= 0 ? $(div).css("color", "#4CAF50") : $(div).css("color", "#EF5350");
+
+}
+
+
