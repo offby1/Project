@@ -18,6 +18,12 @@ def budgetpage():
     return jsonify(budgetData=charts.budgetData())
 
 
+@app.route('/overallbudget/')
+def overallbudgetpage():
+
+    return jsonify(overallbudgetData=charts.overallbudgetData())
+
+
 @app.route('/NIFX/')
 def nifxpage():
 
@@ -27,19 +33,21 @@ def nifxpage():
 @app.route('/balances/')
 def balancespage():
 
-    return jsonify(balanceData=charts.balanceData())
+    return jsonify(balanceData=charts.balanceData(), currentBalanceData=charts.currentbalancedata())
 
 
-@app.route('/currentbalance/')
-def currentbalancepage():
-
-    return jsonify(currentBalanceData=charts.currentbalancedata())
 
 
 @app.route('/spending/')
 def spendingpage():
 
     return jsonify(spendingdata=charts.spendingdata())
+
+
+@app.route('/currentspending/')
+def currentspendingpage():
+
+    return jsonify(spendingdata=charts.sumspendingdata())
 
 
 @app.route('/netincome/')
@@ -51,7 +59,7 @@ def netincomepage():
 @app.route('/stocks/')
 def stockspage():
 
-    return jsonify(stockdata=charts.stockData())
+    return jsonify(sumStockTableData=charts.sumstockdata(), sumstocksPricesData=charts.sumstockPricesData())
 
 
 @app.route('/stockPrices/')
