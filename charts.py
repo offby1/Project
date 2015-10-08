@@ -177,7 +177,7 @@ def sumstockPricesData():
     return returnTable(df), returnTable(df4)
     #return returnTable(df)
 
-sumstockPricesData()
+
 def sumstockPricesOriginalData():
 
     a = sqlqueries.sqlSumStockData()
