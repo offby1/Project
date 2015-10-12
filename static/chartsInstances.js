@@ -9,7 +9,7 @@
 
 function initializeBalanceChart(balanceData, currentBalanceData) {
 
-    var balances = new chartV2(
+    var balances = new chart(
         div = 'balancesDiv',
         data = balanceData,
         divcol = 6,
@@ -32,7 +32,6 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
     balances.setMultipleOptions([
         ['lineWidth', 0.05],
         ['areaOpacity', 0.2],
-        ['animation.duration', 750],
         ['tooltip.trigger', 'none'],
         ['hAxis.gridlines.count', 0],
         ['vAxis.gridlines.count', 0],
@@ -74,7 +73,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
 
     };
 
-    currentBalance = new chartV2(
+    currentBalance = new chart(
         div = 'currentBalanceDiv',
         data = currentBalanceData,
         divcol = 6
@@ -93,6 +92,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
         formatMoneyColor('#todayBalance', todayBalance);
         formatMoneyColor('#oldBalance', oldBalance);
         formatMoneyColor('#change', todayBalance - oldBalance);
+
     };
 
     google.visualization.events.removeAllListeners(currentBalance.chartWrapper);
@@ -102,6 +102,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
     currentBalance.dataTable = currentBalance.initialDraw(currentBalance.data);
     balances.dataTable = balances.initialDraw(balances.data);
     balances.redraw();
+    //balances.finalDraw();
 }
 
 
@@ -112,7 +113,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
 
 function initializeBudgetChart(overallbudgetData) {
 
-    var budgetChart = new chartV2(
+    var budgetChart = new chart(
         div = 'budgetChartDiv',
         data = overallbudgetData,
         divcol = 6,
@@ -198,7 +199,7 @@ function initializeBudgetChart(overallbudgetData) {
 
 function initializeSpendingChart(spendingdata) {
 
-    var spendingChart = new chartV2(
+    var spendingChart = new chart(
         div = 'monthlySpendDiv',
         data = spendingdata,
         divcol = 6,
@@ -251,7 +252,8 @@ function initializeSpendingChart(spendingdata) {
 
     spendingChart.redraw = function () {
 
-        this.dataOwnerJoin = this.dataJoin(this.dataTable, google.visualization.arrayToDataTable([['Owner'], ['Dan'], ['Emma']]));
+        this.dataOwnerJoin = this.dataJoin(this.dataTable, "Combined");
+        //this.dataOwnerJoin = this.dataJoin(this.dataTable);
         this.dataView = this.dataOwnerGroup(this.dataOwnerJoin);
         this.dataView = this.currencyChange(this.dataView);
         this.chartWrapper.setDataTable(this.dataView);
@@ -309,7 +311,7 @@ function initializeSpendingChart(spendingdata) {
 
 function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) {
 
-    var summaryStockChart = new chartV2(
+    var summaryStockChart = new chart(
         div = 'sumStockTableDiv',
         data = stockSumData,
         divcol = 6,
@@ -319,7 +321,7 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         //valStartCol = 4
     );
 
-    var stockChart = new chartV2(
+    var stockChart = new chart(
         div = 'stockPricesDiv2',
         data = stockPriceData,
         divcol = 6,
@@ -332,7 +334,7 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         tooltip = true
     );
 
-    stockChart.tooltipinfo = originalStockPrice;
+    stockChart.tooltipinfo = new google.visualization.DataTable(originalStockPrice);
 
     stockChart.hrefHTML = "#/stocks/";
     stockChart.onclickHTML = "loadStocksPage()";
@@ -383,8 +385,16 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         this.chartWrapper.setDataTable(this.dataView);
         GLOBALS.formatdate.format(this.dataView, 0);
 
-        formatMoneyColor('#todayStocks', summaryStockChart.dataView.getValue(0, 1));
-        formatMoneyColor('#totalStocks', summaryStockChart.dataView.getValue(0, 2));
+        try {
+            todayStocks = summaryStockChart.dataView.getValue(0, 1);
+            totalStocks = summaryStockChart.dataView.getValue(0, 2);
+        }
+        catch (err) {
+            todayStocks = 0;
+            totalStocks = 0;
+        }
+        formatMoneyColor('#todayStocks', todayStocks);
+        formatMoneyColor('#totalStocks', totalStocks);
 
     };
 
@@ -416,4 +426,345 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
     summaryStockChart.dataTable = summaryStockChart.initialDraw(summaryStockChart.data);
     stockChart.dataTable = stockChart.initialDraw(stockChart.data);
     stockChart.redraw();
+}
+
+
+//////////////////////////////////////////////////////////////////
+////////////////       STOCKS CHART 2      ////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+function initializeStocksChart(stocksData) {
+
+    var stocks = new chart(
+        div = 'stocksDiv',
+        data = stocksData,
+        divcol = 6,
+        firstTitle = 'Stock Gain/Loss',
+        secondTitle = 'Cumulative Investments Over Time',
+        sumcol = true
+    );
+
+    stocks.chartWrapper.setChartType('ComboChart');
+    stocks.chartWrapper.setOption('seriesType', 'area');
+    stocks.chartWrapper.setOption('lineWidth', 0);
+    stocks.chartWrapper.setOption('areaOpacity', 0.5);
+    stocks.chartWrapper.setOption('series.10.type', 'line');
+    stocks.controlWrapper.setOption('ui.chartOptions.seriesType', 'area');
+    stocks.controlWrapper.setOption('ui.chartOptions.series.5.type', 'line');
+    stocks.controlWrapper.setState({range: {start: new Date(2015, 5, 1)}});
+
+    GLOBALS.grid.append(stocks.htmldiv);
+    stocks.dataTable = stocks.initialDraw(stocks.data);
+    stocks.redraw();
+
+}
+
+
+function initializeStockTable(stockTableData) {
+
+    stockTable = new chart(
+        div = 'stockTableDiv',
+        data = stockTableData,
+        divcol = 6,
+        firstTitle = 'Stock Summary',
+        secondTitle = 'Performance',
+        sumcol = false,
+        valStartCol = 4
+    );
+
+    GLOBALS.grid.append('<div class="demo-graphs mdl-cell mdl-cell--12-col" style="padding:0px 0px"><div id="stockTableDiv" style="width:100%; "></div></div>');
+
+    var stockTable2 = new table.MyTable(document.getElementById('stockTableDiv'));
+
+    stockTable.redraw = function () {
+
+        stockTable.dataOwnerJoin = stockTable.dataJoin(stockTable.dataTable);
+        stockTable.dataView = stockTable.dataOwnerGroup(stockTable.dataOwnerJoin);
+        stockTable.dataView.removeColumns(0, 1);
+        GLOBALS.format4decimals.format(stockTable.dataView, 1);
+        GLOBALS.formatdecimals.format(stockTable.dataView, 2);
+        GLOBALS.formatdecimals.format(stockTable.dataView, 3);
+        GLOBALS.formatdecimals.format(stockTable.dataView, 4);
+        stockTable2.draw(stockTable.dataView, {showLineNumber: true});
+
+    };
+
+    stockTable.dataTable = stockTable.initialDraw(stockTable.data);
+    stockTable.redraw()
+
+}
+
+
+function initializeStockPrices(stockPriceData) {
+
+    stockPrices = new chart(
+        div = 'stockPricesDiv',
+        data = stockPriceData,
+        divcol = 6,
+        firstTitle = 'Stock Prices',
+        secondTitle = 'Over Time',
+        sumcol = false
+    );
+
+    stockPrices.chartWrapper.setChartType('LineChart');
+    stockPrices.chartWrapper.setOption('interpolateNulls', false);
+    stockPrices.controlWrapper.setState({range: {start: new Date(2015, 5, 1)}});
+    stockPrices.controlWrapper.setOption('ui.chartOptions.seriesType', 'line');
+    stockPrices.controlWrapper.setOption('ui.chartOptions.lineWidth', 1);
+
+    GLOBALS.grid.append(stockPrices.htmldiv);
+    stockPrices.dataTable = stockPrices.initialDraw(stockPrices.data);
+    stockPrices.redraw();
+
+}
+
+
+
+function initializeIndBudgetChart(budgetData) {
+
+    indBudgetChart = new chart(
+        div = 'indBudgetChartDiv',
+        data = budgetData,
+        divcol = 6,
+        firstTitle = 'Budget',
+        secondTitle = 'Month to Date',
+        sumcol = false,
+        valStartCol = 4
+    );
+
+    indBudgetChart.redraw = function () {
+
+        this.dataOwnerJoin = this.dataJoin(this.dataTable);
+        this.dataView = this.dataOwnerGroup(this.dataOwnerJoin);
+        this.dataView.removeColumns(0,2);
+        this.dataView = this.drawIndBudget(this.dataView);
+        this.chartWrapper.setDataTable(this.dataView);
+        this.chartWrapper.draw();
+
+    };
+
+    indBudgetChart.chartWrapper.setChartType('BarChart');
+    indBudgetChart.chartWrapper.setOption('isStacked', 'percent');
+    indBudgetChart.chartWrapper.setOption('chartArea.left', 150);
+    indBudgetChart.chartWrapper.setOption('chartArea.width', '70%');
+    indBudgetChart.chartWrapper.setOption('chartArea.height', '95%');
+    indBudgetChart.chartWrapper.setOption('colors', ['#EF5350', GLOBALS.chartcolours[3], GLOBALS.chartcolours[3], '#C8E6C9', '#E8F5E9']);
+    indBudgetChart.chartWrapper.setOption('hAxis.gridlines.count', 0);
+    indBudgetChart.chartWrapper.setOption('hAxis.viewWindow.min', 0);
+
+    GLOBALS.grid.append(indBudgetChart.htmlChartdiv);
+
+    indBudgetChart.dataTable = indBudgetChart.initialDraw(indBudgetChart.data);
+    indBudgetChart.redraw();
+
+}
+
+
+
+function initializeNIFXChart(NIFXdata) {
+
+    NIFX = new chart(
+        div = 'NIFXDiv',
+        data = NIFXdata,
+        divcol = 6,
+        firstTitle = 'NIFX',
+        secondTitle = 'Month to Date',
+        sumcol = false,
+        valStartCol = 2
+    );
+
+
+    NIFX.redraw = function () {
+
+        this.dataOwnerJoin = this.dataJoin(this.dataTable);
+        this.dataView = this.dataOwnerGroup(this.dataOwnerJoin);
+        this.dataView = manipulateNIFXData(this.dataView);
+        this.dashboard.draw(this.dataView);
+
+    };
+
+    NIFX.setMultipleOptions([
+        ['vAxes.0.viewWindow.max', 10000],
+        ['vAxes.0.viewWindow.min', 0],
+        ['vAxes.1.viewWindow.max', 10000],
+        ['vAxes.1.viewWindow.min', 0],
+        ['vAxes.1.gridlines.count', 0],
+        ['series.3.type', 'area'],
+        ['series.3.targetAxisIndex', 1],
+        ['series.4.type', 'area'],
+        ['series.4.targetAxisIndex', 1],
+        ['series.5.type', 'area'],
+        ['series.5.targetAxisIndex', 1]
+    ]);
+
+    GLOBALS.grid.append(NIFX.htmldiv);
+
+    NIFX.dataTable = NIFX.initialDraw(NIFX.data);
+    NIFX.redraw();
+
+    google.visualization.events.addListener(NIFX.controlWrapper, 'statechange', function (e) {
+        if (e.inProgress == false) {
+            NIFX.redraw();
+        }
+    });
+
+}
+
+
+function manipulateNIFXData(dataView) {
+
+    // amounts are all imported as USD. Converts all to CAD if button is selected
+    ($('#CurrencyButton').text() === "CAD") ? dataView.removeColumns(1, 3) : dataView.removeColumns(4, 3);
+
+    dataView.addColumn('number', 'Total FX Gain/Loss');
+    dataView.addColumn('number', 'Total Investments');
+    dataView.addColumn('number', 'Total Income');
+
+    var choose = NIFX.controlWrapper.getState().range.start;
+
+    for (i = 1; i < dataView.getNumberOfRows(); i++) {
+
+        if (dataView.getValue(i, 0) < choose) {
+
+            for (j = 1; j < 4; j++) {
+                dataView.setValue(i, j + 3, 0);
+            }
+        } else {
+
+            for (j = 1; j < 4; j++) {
+
+                var currow = dataView.getValue(i, j);
+                var prevrow = dataView.getValue(i - 1, j + 3);
+                dataView.setValue(i, j + 3, currow + prevrow);
+            }
+        }
+    }
+
+    var view = new google.visualization.DataView(dataView);
+    var filteredRows = dataView.getFilteredRows([{column: 0, minValue: choose, maxValue: null}]);
+
+    view.setRows(filteredRows);
+
+    var rowMin = rowMax = minx = maxx = [];
+
+    for (var i = 1; i < view.getNumberOfRows(); i++) {
+        var minInRow = maxInRow = 0;
+        for (var j = 1; j <= 3; j++) {
+            minInRow += Math.min(0, view.getValue(i, j));
+            maxInRow += Math.max(0, view.getValue(i, j));
+        }
+        rowMin.push(minInRow);
+        rowMax.push(maxInRow);
+    }
+
+    var minimum1 = getMinOfArray(rowMin);
+    var maximum1 = getMaxOfArray(rowMax);
+
+    for (i = Math.ceil(view.getNumberOfColumns() / 2); i < view.getNumberOfColumns(); i++) {
+        rowMin[i] = view.getColumnRange(i);
+        minx.push(rowMin[i].min);
+        maxx.push(rowMin[i].max);
+    }
+    var minimum2 = getMinOfArray(minx);
+    var maximum2 = getMaxOfArray(maxx);
+
+    var e = (maximum1 / (maximum1 - minimum1));
+    minimum2 = -(maximum2 / e) * (1 - e);
+
+    NIFX.setMultipleOptions([
+        ['vAxes.0.viewWindow.min', minimum1],
+        ['vAxes.0.viewWindow.max', maximum1],
+        ['vAxes.1.viewWindow.min', minimum2],
+        ['vAxes.1.viewWindow.max', maximum2]
+    ]);
+
+    dataView = NIFX.formatDateAndAmount(dataView);
+
+    return dataView;
+}
+
+
+
+
+function initializeMonthlySpend(spendingdata) {
+
+    monthlySpend = new chart(
+        div = 'monthlySpendDiv',
+        data = spendingdata,
+        divcol = 6,
+        firstTitle = 'Spending',
+        secondTitle = 'Monthly Expenses'
+    );
+
+    monthlySpend.chartWrapper.setOption('vAxis.minValue', 0);
+    monthlySpend.chartWrapper.setOption('vAxis.minValue', 0);
+    monthlySpend.chartWrapper.setOption('dataOpacity', 0.8);
+    monthlySpend.chartWrapper.setOption('colors', [GLOBALS.chartcolours[3]]);
+    monthlySpend.controlWrapper.setOption('ui.chartOptions.colors', [GLOBALS.chartcolours[3]]);
+
+    GLOBALS.grid.append(monthlySpend.htmldiv);
+    monthlySpend.dataTable = monthlySpend.initialDraw(monthlySpend.data);
+    monthlySpend.redraw();
+
+}
+
+
+function initializeNetIncomeChart(netincomedata) {
+
+    NI = new chart(
+        div = 'netIncomeDiv',
+        data = netincomedata,
+        divcol = 6,
+        firstTitle = 'Net Income',
+        secondTitle = 'By Month'
+    );
+
+    NI.chartWrapper.setOption('dataOpacity', 0.8);
+    NI.chartWrapper.setOption('colors', [GLOBALS.chartcolours[3]]);
+    NI.controlWrapper.setOption('ui.chartOptions.colors', [GLOBALS.chartcolours[3]]);
+
+    GLOBALS.grid.append(NI.htmldiv);
+    NI.dataTable = NI.initialDraw(NI.data);
+    NI.redraw();
+
+}
+
+
+function indtranstable(x, y) {
+
+    var transdata = new google.visualization.DataTable();
+
+    transdata.addColumn('date', 'Date');
+    for (i = 1; i < y.length; i++) {
+
+        var datatype = typeof(x[0][i]) === 'number' ? 'number' : 'string';
+        transdata.addColumn(datatype, y[i]);
+    }
+    var a = [];
+    for (i = 0; i < x.length; i++) {
+
+        var b = [];
+        b.push(new Date(x[i][0]));
+        for (j = 1; j < x[i].length; j++) {
+            b.push(x[i][j]);
+        }
+        a.push(b);
+    }
+
+    transdata.addRows(a);
+    for (i = 0; i < transdata.getNumberOfColumns(); i++) {
+        if (transdata.getColumnType(i) === 'number') {
+            GLOBALS.formatdecimals.format(transdata, i);
+        }
+    }
+
+    var view = new google.visualization.DataView(transdata);
+    view.hideColumns([6, 7, 8]); // hides account type, currency and FX rate
+
+    var visind = new table.MyTable(document.getElementById('transactions_table_div'));
+
+    visind.draw(view, {showLineNumber: true});
+
+
 }

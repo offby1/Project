@@ -7,6 +7,7 @@ html, body {
   width: 48px;
   height: 48px;
   border-radius: 24px;
+  color: black;
 }
 .demo-layout .demo-header .mdl-textfield {
   padding-top: 27px;
@@ -80,6 +81,8 @@ html, body {
       -ms-flex-positive: 1;
           flex-grow: 1;
 }
+
+
 .demo-layout .demo-navigation .mdl-navigation__link {
   display: -webkit-box !important;
   display: -webkit-flex !important;
@@ -94,7 +97,7 @@ html, body {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  color: rgba(255, 255, 255, 0.56);
+  color: #78909c;
   font-weight: 500;
 }
 .demo-layout .demo-navigation .mdl-navigation__link:hover {
@@ -146,7 +149,13 @@ html, body {
       -ms-flex-align: stretch;
           align-items: stretch;
   border-radius: 2px;
+    height: 300px;
 
+}
+
+#buttons {
+
+    height: 50px;
 }
 /* TODO: Find a proper solution to have the graphs
  * not float around outside their container in IE10/11.
@@ -375,6 +384,31 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 .myButton:focus {
     outline: none;
+}
+
+.mdl-layout__content3 {
+    background-image: url("data:image/svg+xml;utf8,\
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 100 100'>\
+        <linearGradient id='g1' x1='0%' y1='0%' x2='100%' y2='0%'>\
+            <stop offset='0%' style='stop-color:%2300838F;stop-opacity:1'/>\
+            <stop offset='100%' style='stop-color:%2326C6DA;stop-opacity:0'/>\
+        </linearGradient>\
+        <linearGradient id='g2' x1='0%' y1='0%' x2='0%' y2='100%'>\
+            <stop offset='0%' style='stop-color:%2300838F;stop-opacity:1'/>\
+            <stop offset='100%' style='stop-color:%2326C6DA;stop-opacity:0'/>\
+        </linearGradient>\
+        <radialGradient id='g3' cx='0%' cy='0%' r='100%'>\
+            <stop offset='0%' style='stop-color:%2300838F;stop-opacity:1'/>\
+            <stop offset='100%' style='stop-color:%2326C6DA;stop-opacity:0'/>\
+        </radialGradient>\
+        <g transform='rotate(45) translate(21.2 -49.5)'>\
+            <rect x='-50%' y='-50%' width='100%' height='100%' fill='%2380DEEA'/>\
+            <rect x='50%' y='-50%' width='2%' height='100%' fill='url(%23g1)'/>\
+            <rect x='-50%' y='50%' width='100%' height='2%' fill='url(%23g2)'/>\
+            <rect x='50%' y='50%' width='2%' height='2%' fill='url(%23g3)'/>\
+        </g>\
+    </svg>");
+
 }
 
 #CurrencyButton {

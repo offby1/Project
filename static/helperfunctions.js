@@ -53,18 +53,26 @@ function JointButtonClick() {
 // adjusts owner table to match button. Used to later join on datatables to filter data by owner
 
     var label1 = $('#JointButton').text();
-    if (label1 === "Joint") {
+    if (label1 === "Combined") {
         GLOBALS.owner.setValue(0, 0, '');
         GLOBALS.owner.setValue(1, 0, 'Emma');
+        GLOBALS.owner.setValue(2, 0, '');
         $('#JointButton').text("Emma");
     } else if (label1 === "Emma") {
         GLOBALS.owner.setValue(0, 0, 'Dan');
         GLOBALS.owner.setValue(1, 0, '');
+        GLOBALS.owner.setValue(2, 0, '');
         $('#JointButton').text("Dan");
     } else if (label1 === "Dan") {
+        GLOBALS.owner.setValue(0, 0, '');
+        GLOBALS.owner.setValue(1, 0, '');
+        GLOBALS.owner.setValue(2, 0, 'Joint');
+        $('#JointButton').text("Joint");
+    } else if (label1 === "Joint") {
         GLOBALS.owner.setValue(0, 0, 'Dan');
         GLOBALS.owner.setValue(1, 0, 'Emma');
-        $('#JointButton').text("Joint");
+        GLOBALS.owner.setValue(2, 0, 'Joint');
+        $('#JointButton').text("Combined");
     }
 
     redrawCharts();
@@ -90,20 +98,14 @@ function getMinOfArray(numArray) {
   return Math.min.apply(null, numArray);
 }
 
-
 function redrawCharts() {
-
-    GLOBALS.charts.forEach(function(value) {
-
-        value[0].redraw();
-
-    })
+    GLOBALS.charts.forEach(function(value) { $("#"+value[0].chartdiv).length > 0 ? value[0].redraw() : void(0); })
 }
 
 
 function joint(joint) {
-    if ($('#JointButton').text() === "Joint") {
-        return "Joint";
+    if ($('#JointButton').text() === "Combined") {
+        return "Combined";
     } else {
         return joint;
     }

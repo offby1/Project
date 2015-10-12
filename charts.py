@@ -8,7 +8,7 @@ from helperfunctions import returnTable, droplevel
 import sqlqueries
 
 engine = create_engine('sqlite:///money.db')
-owners = ['Emma','Dan']
+owners = ['Emma','Dan','Joint']
 
 def spendingdata():
 
@@ -45,6 +45,13 @@ def balanceData():
     return returnTable(df)
 
 
+def currentbalancedata():
+
+    a = sqlqueries.sqlcurrentbalance()
+    df = pd.read_sql(a, engine, parse_dates='transdate')
+
+    return returnTable(df)
+
 
 def stockData():
 
@@ -59,6 +66,7 @@ def stockData():
         df[df.owner==owner] = df[df.owner==owner].sort(['transdate']).fillna(method='pad')
 
     df = df.fillna(0)
+
     droplevel(df)
 
     return returnTable(df)
@@ -94,7 +102,7 @@ def overallbudgetData():
 
     a = sqlqueries.sqloverallbudget()
 
-    df = pd.read_sql(a, engine)
+    df = pd.read_sql(a, engine, parse_dates='transdate')
 
     return returnTable(df)
 
@@ -109,12 +117,14 @@ def NIFXdata():
 
 def indtransactions(a, page, limit):
 
-    if a == "Joint":
+    if a == "Combined":
         b = ""
     elif a == "Emma":
         b = 'and bankaccounts.owner = "%s"' %'Emma'
-    else:
+    elif a == "Dan":
         b = 'and bankaccounts.owner = "%s"' %'Dan'
+    else:
+        b = 'and bankaccounts.owner = "%s"' %'Joint'
 
     a = sqlqueries.sqlindtransactions()
     df = pd.read_sql(a %(b, limit, (page-1)*limit), engine, parse_dates='transdate')
@@ -137,12 +147,7 @@ def accruals():
     return returnTable(df)
 
 
-def currentbalancedata():
 
-    a = sqlqueries.sqlcurrentbalance()
-    df = pd.read_sql(a, engine, parse_dates='transdate')
-
-    return returnTable(df)
 
 
 def sumstockdata():
@@ -169,11 +174,13 @@ def sumstockPricesData():
     initial = initial.sum()
     df2 = df3.divide(initial / 100)
     df.iloc[:,3:] = df2
-
+    df4 = df4.reset_index()
+    df4.columns = ['Stock','Price']
     df = df.fillna(0)
     #print df4
     #initial = pd.DataFrame(initial)
-    #print [returnTable(df), returnTable(df4)]
+    #print df4
+    #print returnTable(df)#, returnTable(df4)
     return returnTable(df), returnTable(df4)
     #return returnTable(df)
 

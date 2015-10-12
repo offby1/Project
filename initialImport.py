@@ -171,6 +171,7 @@ def NIFX():
 
     FXquery = sqlqueries.FXquery()
     df = pd.read_sql(FXquery, engine, parse_dates='transdate')
+
     df = findFX(df)
 
     spendingQuery = sqlqueries.spendingQuery()
@@ -201,19 +202,19 @@ def findFX(df):
     df['CADFX'] = df.CADbalance - df.CAbalance
 
     df = df[['transdate','Owner','Currency','USFX','CADFX']]
+
     df['transdate'] = pd.DatetimeIndex(df['transdate'])
     df['PrevDate'] = pd.DatetimeIndex(df['transdate']) + pd.offsets.MonthEnd(-1)
 
-    df.iloc[0:3,3:5] = 0.0 ### change first three balances to zero. Needed for pad filling step below.
+
+    df.iloc[0:4,3:5] = 0.0 ### change first three balances to zero. Needed for pad filling step below.
 
     df = df.sort(['Owner','Currency','transdate','PrevDate']).fillna(method='pad')
-
     df = pd.merge(df, df, how='left', left_on=['PrevDate','Owner','Currency'], right_on=['transdate','Owner','Currency'])
 
     df['FXUSD'] = df.USFX_x - df.USFX_y
     df['FXCAD'] = df.CADFX_x - df.CADFX_y
     df = df[['transdate_x','Owner','Currency','FXUSD','FXCAD']]
-
     df = df.sort(['Owner','Currency','transdate_x']).fillna(method='pad')
 
     df['Category'] = "FX Gain/Loss"

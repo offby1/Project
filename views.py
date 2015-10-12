@@ -12,6 +12,18 @@ def homepage():
     return render_template("index.html")
 
 
+@app.route('/front/')
+def frontpage():
+
+    return jsonify(balanceData=charts.balanceData(),
+                   currentBalanceData=charts.currentbalancedata(),
+                   overallbudgetData=charts.overallbudgetData(),
+                   spendingdata=charts.sumspendingdata(),
+                   sumStockTableData=charts.sumstockdata(),
+                   sumstocksPricesData=charts.sumstockPricesData()
+                   )
+
+
 @app.route('/budget/')
 def budgetpage():
 
@@ -34,8 +46,6 @@ def nifxpage():
 def balancespage():
 
     return jsonify(balanceData=charts.balanceData(), currentBalanceData=charts.currentbalancedata())
-
-
 
 
 @app.route('/spending/')
@@ -66,6 +76,11 @@ def stockspage():
 def stockspricespage():
 
     return jsonify(stocksPricesData=charts.stockPricesData())
+
+@app.route('/stocksChart/')
+def stockschartpage():
+
+    return jsonify(stockData=charts.stockData())
 
 @app.route('/sumstockPrices/')
 def sumstockspricespage():

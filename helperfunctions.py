@@ -1,5 +1,6 @@
 __author__ = 'emmaachberger'
 
+import gviz_api
 
 def table_of_dates(y, m, d, t):
 ### create dataframe of dates from inception until today. returns resulting dataframe
@@ -26,7 +27,8 @@ def convert(native, curr, fx):
     else:
         return native / fx
 
-def returnTable(df):
+"""
+def returnTable2(df):
 # returns list of table columns and data to be sent to google charts
 
     columns = df.columns.tolist()
@@ -37,6 +39,30 @@ def returnTable(df):
     list.append(data)
 
     return list
+"""
+
+def returnTable(df):
+# returns list of table columns and data to be sent to google charts
+
+    def getcolumntype(argument):
+        switcher = {
+            'datetime64[ns]': "Date",
+            'object': "string",
+            'float64': "number",
+            'int64': "number"
+        }
+        return switcher.get(argument, "string")
+
+    cols = []
+    for i in (df.columns):
+        cols.append((i, getcolumntype(str(df[i].dtype))))
+
+    data = df.values.tolist()
+
+    data_table = gviz_api.DataTable(cols)
+    data_table.LoadData(data)
+
+    return data_table.ToJSon()
 
 
 def droplevel(df, col1='transdate', col2='owner', col3='fxrate'):

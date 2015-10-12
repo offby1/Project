@@ -8,8 +8,19 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../static/material.min.css">
     <link rel="stylesheet" href="../static/styles.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto2:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
     <!--<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        //loadHomePage();
+    </script>
+    <script type="text/javascript" async>
 
+        //data = [];
+        //$.getJSON($SCRIPT_ROOT + '/front', {}, function (data) { loadHomePage(data); });
+
+    </script>
 
 </head>
 <body>
@@ -40,7 +51,7 @@
             </ul>
         </div>
     </header>
-    <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+    <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-400 mdl-color-text--white">
         <header class="demo-drawer-header">
             <img src="../static/images/user.jpg" class="demo-avatar">
 
@@ -83,8 +94,11 @@
                     role="presentation">extension</i>Accrual</a>
         </nav>
     </div>
-    <main class="mdl-layout__content mdl-color--grey-100"
+    <main class="mdl-layout__content"
           style="background-image: url(../static/images/backgroundbanner.jpg)">
+        <!--mdl-color--grey-100"-->
+
+
         <div class="mdl-grid demo-content">
 
             <!-- page divs are appended here -->
@@ -104,24 +118,28 @@
     <div class="mdl-tooltip" for="CurrencyButton" style="background-color: #77b55a">
                         Currency
                     </div>
-    <button class="myButton" id="JointButton">Joint</button>
+    <button class="myButton" id="JointButton">Combined</button>
 </div>
+
 
 <script type="text/javascript"
         src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization",
-                                              "version":"1.1","packages":["controls"]}]}'>
+                                              "version":"1","packages":["controls"]}]}'>
 </script>
-<script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="../static/main.js"></script>
+
+<!--
+<script type="text/javascript"
+        src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization",
+                                              "version":"1.1"}]}'>
+</script>
+-->
+<script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js" async></script>
+
 <script src="../static/charts.js"></script>
-<script src="../static/chartsV2.js"></script>
-<script src="../static/createCharts.js"></script>
 <script src="../static/chartsInstances.js"></script>
 <script src="../static/helperfunctions.js"></script>
-<script type=text/javascript>
-    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
+<script src="../static/main.js"></script>
+
 
 </body>
 </html>

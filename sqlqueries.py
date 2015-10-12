@@ -321,7 +321,7 @@ def FXquery():
          INNER JOIN bankaccounts ON transactions.accountname = bankaccounts.MintAccountName
          INNER JOIN fxrates AS FX1 ON transactions.transdate = FX1.FXDate
          LEFT JOIN categories ON transactions.category = categories.Category
-       GROUP BY Date, bankaccounts.Owner, bankaccounts.Currency) AS T3
+       GROUP BY date(transactions.transdate, 'start of month', '+1 month', '-1 day'), bankaccounts.Owner, bankaccounts.Currency) AS T3
 
         ON T2.transdate = T3.Date AND T2.Currency = T3.Currency AND T2.Owner = T3.Owner
         order by T2.transdate;
@@ -366,7 +366,7 @@ def spendingQuery():
        FROM transactions
          INNER JOIN bankaccounts ON transactions.accountname = bankaccounts.MintAccountName
          INNER JOIN fxrates AS FX1 ON transactions.transdate = FX1.FXDate
-       GROUP BY Date, bankaccounts.Owner, Category1) AS T1
+       GROUP BY date(transactions.transdate, 'start of month', '+1 month', '-1 day'), bankaccounts.Owner, Category1) AS T1
       INNER JOIN fxrates AS FX2 ON date(FX2.FXDate) = date(T1.Date)
 
     '''

@@ -25,7 +25,8 @@ window.GLOBALS = {
     owner: google.visualization.arrayToDataTable([
         ['Owner'],
         ['Dan'],
-        ['Emma']
+        ['Emma'],
+        ['Joint']
     ]),
     grid: $('.mdl-grid'),
     cache: {},
@@ -41,10 +42,14 @@ $(document).ready(function() {
 
 });
 
+function clearPage(){
+    GLOBALS.grid.empty(); /// clears all charts on current page
+    GLOBALS.charts = [];
+}
 
 function loadHomePage() {
 
-    GLOBALS.grid.empty(); /// clears all charts on current page
+    clearPage();
 
     $.getJSON($SCRIPT_ROOT + '/balances', {}, function (data) { initializeBalanceChart(data.balanceData, data.currentBalanceData); });
 
@@ -61,7 +66,7 @@ function loadHomePage() {
 
 function loadTransactionsPage() {
 
-    GLOBALS.grid.empty(); /// clears all charts on current page
+    clearPage();
 
     $.getJSON($SCRIPT_ROOT + '/transactions', {limit:20}, function (data) {
 
@@ -71,35 +76,24 @@ function loadTransactionsPage() {
         initiateButtons();
 
         });
-        return false;
+
+    return false;
 
 }
 
 function loadStocksPage() {
 
-    GLOBALS.grid.empty();
+    clearPage();
 
-    $.getJSON($SCRIPT_ROOT + '/stocks', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/stocks', {}, function (data) { initializeStockChart(data.sumStockTableData, data.sumstocksPricesData[0], data.sumstocksPricesData[1]); });
 
-        initializeStocksChart(data.stockdata);
+    $.getJSON($SCRIPT_ROOT + '/stocksChart', {}, function (data) { initializeStocksChart(data.stockData); });
 
-        });
+    $.getJSON($SCRIPT_ROOT + '/stockPrices', {}, function (data) { initializeStockPrices(data.stocksPricesData); });
 
-    $.getJSON($SCRIPT_ROOT + '/stockPrices', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/stockTable', {}, function (data) { initializeStockTable(data.stockTableData); });
 
-        initializeStockPrices(data.stocksPricesData);
-
-        });
-
-    $.getJSON($SCRIPT_ROOT + '/stockTable', {}, function (data) {
-
-        initializeStockTable(data.stockTableData);
-
-    });
-
-        return false;
-
-
+    return false;
 
 }
 
@@ -108,14 +102,11 @@ function loadStocksPage() {
 
 function loadBudgetPage() {
 
-    GLOBALS.grid.empty();
+    clearPage();
 
-    $.getJSON($SCRIPT_ROOT + '/budget', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/overallbudget', {}, function (data) { initializeBudgetChart(data.overallbudgetData); });
 
-        initializeBudgetChart(data.budgetData);
-        initializeIndBudgetChart(data.budgetData);
-
-    });
+    $.getJSON($SCRIPT_ROOT + '/budget', {}, function (data) { initializeIndBudgetChart(data.budgetData); });
 
     return false;
 
@@ -124,37 +115,23 @@ function loadBudgetPage() {
 
 function loadBalancesPage() {
 
-    GLOBALS.grid.empty();
+    clearPage();
 
-    $.getJSON($SCRIPT_ROOT + '/balances', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/balances', {}, function (data) { initializeBalanceChart(data.balanceData, data.currentBalanceData); });
 
-        initializeBalanceChart(data.balanceData);
+    $.getJSON($SCRIPT_ROOT + '/NIFX', {}, function (data) { initializeNIFXChart(data.NIFXdata); });
 
-    });
-    $.getJSON($SCRIPT_ROOT + '/NIFX', {}, function (data) {
-
-        initializeNIFXChart(data.NIFXdata);
-
-    });
     return false;
 
 }
 
 function loadSpendingPage() {
 
-    GLOBALS.grid.empty();
+    clearPage();
 
-    $.getJSON($SCRIPT_ROOT + '/spending', {}, function (data) {
+    $.getJSON($SCRIPT_ROOT + '/spending', {}, function (data) { initializeMonthlySpend(data.spendingdata); });
 
-        initializeMonthlySpend(data.spendingdata);
-
-    });
-
-    $.getJSON($SCRIPT_ROOT + '/netincome', {}, function (data) {
-
-        initializeNetIncomeChart(data.netincomedata);
-
-    });
+    $.getJSON($SCRIPT_ROOT + '/netincome', {}, function (data) { initializeNetIncomeChart(data.netincomedata); });
 
     return false;
 
@@ -162,7 +139,7 @@ function loadSpendingPage() {
 
 function loadAccrualPage() {
 
-    GLOBALS.grid.empty();
+    clearPage();
 
     $.getJSON($SCRIPT_ROOT + '/accrual', {}, function (data) {
 
@@ -177,12 +154,12 @@ function loadAccrualPage() {
 
 
 function initiateButtons() {
+
     $('#JointButton').bind('click', function () {
         if ($('#transactions_table_div').length > 0) {
             redraw();
         }
     });
-
 
     $('#PageUpButton').bind('click', function () {
 
@@ -206,7 +183,7 @@ function initiateButtons() {
         redraw();
 
     });
-};
+}
 
 function redraw() {
 
