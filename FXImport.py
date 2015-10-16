@@ -5,11 +5,11 @@ import datetime
 import instance
 import pandas as pd
 from sqlalchemy import create_engine
-from initialImport import fximport
+
 
 engine = create_engine('sqlite:///money.db')
 
-start_date = False  # False or Format "YYYY-MM-DD"
+start_date = "2015-10-06"  # False or Format "YYYY-MM-DD"
 end_date = False  # False or Format "YYYY-MM-DD"
 
 
@@ -70,9 +70,8 @@ def uploadFX(rates):
     df.to_csv('CSVs/FX rates.csv', index=False)
 
 
-# uploadFX(downloadFX())
-# fximport()
-
+def fximport():
+    uploadFX(downloadFX())
 
 """
 df = pd.read_csv('CSVs/FX rates.csv', parse_dates='FXDate')
@@ -80,5 +79,3 @@ df = df.iloc[:,1:]
 print df
 df.to_csv('CSVs/FX rates.csv', index=False)
 """
-
-# Will this actually work?

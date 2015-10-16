@@ -10,6 +10,7 @@ import sqlqueries
 import stockPricesImport
 from mintTransactions import Mint
 from helperfunctions import convert
+import FXImport
 
 engine = create_engine('sqlite:///money.db')
 demo = True  # turns on demo transactions
@@ -134,6 +135,7 @@ def importDatesTable():
 
 def fximport():
 
+    FXImport.fximport()
     df = pd.read_csv('Common/FX rates.csv', parse_dates = ['FXDate'])
     df.to_sql('fxrates', engine, if_exists = 'replace')
 
