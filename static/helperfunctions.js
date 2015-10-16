@@ -50,29 +50,21 @@ table.MyTable.prototype.escapeHtml = function (text) {
 
 
 function JointButtonClick() {
-// adjusts owner table to match button. Used to later join on datatables to filter data by owner
+// cycles through owners for jointbutton label and then redraws charts
 
     var label1 = $('#JointButton').text();
+
     if (label1 === "Combined") {
-        GLOBALS.owner.setValue(0, 0, '');
-        GLOBALS.owner.setValue(1, 0, 'Emma');
-        GLOBALS.owner.setValue(2, 0, '');
-        $('#JointButton').text("Emma");
-    } else if (label1 === "Emma") {
-        GLOBALS.owner.setValue(0, 0, 'Dan');
-        GLOBALS.owner.setValue(1, 0, '');
-        GLOBALS.owner.setValue(2, 0, '');
-        $('#JointButton').text("Dan");
-    } else if (label1 === "Dan") {
-        GLOBALS.owner.setValue(0, 0, '');
-        GLOBALS.owner.setValue(1, 0, '');
-        GLOBALS.owner.setValue(2, 0, 'Joint');
-        $('#JointButton').text("Joint");
-    } else if (label1 === "Joint") {
-        GLOBALS.owner.setValue(0, 0, 'Dan');
-        GLOBALS.owner.setValue(1, 0, 'Emma');
-        GLOBALS.owner.setValue(2, 0, 'Joint');
-        $('#JointButton').text("Combined");
+        $('#JointButton').text(GLOBALS.owner.getValue(0,0));
+    } else {
+        var row = GLOBALS.owner.getFilteredRows([{column: 0, value: label1 }]);
+
+        if (row[0] === GLOBALS.owner.getNumberOfRows()-1) {
+            $('#JointButton').text("Combined");
+        }
+        else {
+            $('#JointButton').text(GLOBALS.owner.getValue(row[0] + 1, 0));
+        }
     }
 
     redrawCharts();

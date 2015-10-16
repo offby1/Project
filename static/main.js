@@ -22,12 +22,13 @@ window.GLOBALS = {
         negativeColor: 'red',
         negativeParens: true
     }),
-    owner: google.visualization.arrayToDataTable([
+    /*owner: google.visualization.arrayToDataTable([
         ['Owner'],
         ['Dan'],
         ['Emma'],
         ['Joint']
-    ]),
+    ]),*/
+    owner: [],
     grid: $('.mdl-grid'),
     cache: {},
     charts: []
@@ -36,11 +37,17 @@ window.GLOBALS = {
 
 $(document).ready(function() {
 
+    $.getJSON($SCRIPT_ROOT + '/owners', {}, function (data) { initializeOwners(data.owners); });
     $('#JointButton').click(JointButtonClick);
     $('#CurrencyButton').click(CurrencyButtonClick);
     loadHomePage();
 
 });
+
+function initializeOwners(data){
+    GLOBALS.owner = new google.visualization.DataTable(data);
+}
+
 
 function clearPage(){
     GLOBALS.grid.empty(); /// clears all charts on current page

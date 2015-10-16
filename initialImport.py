@@ -12,7 +12,7 @@ from mintTransactions import Mint
 from helperfunctions import convert
 
 engine = create_engine('sqlite:///money.db')
-demo = False  # turns on demo transactions
+demo = True  # turns on demo transactions
 mintacct = False  # turns on mint account download
 pd.options.mode.chained_assignment = None  # turns off warning for chained indexing
 
@@ -45,13 +45,21 @@ def initialdataimport():
 
 def importBankAccounts():
 
-    df = pd.read_csv('CSVs/BankAccounts.csv')
+    if demo: ## only used to demo account to add dummy data. Is turned on above.
+        df = pd.read_csv('DemoData/BankAccounts.csv')
+    else:
+        df = pd.read_csv('CSVs/BankAccounts.csv')
+
     df.to_sql('bankaccounts', engine, if_exists = 'replace', index=False)
 
 
 def importStockTransactions():
 
-    df = pd.read_csv('CSVs/StockTransactions.csv', parse_dates = ['transdate'])
+    if demo: ## only used to demo account to add dummy data. Is turned on above.
+        df = pd.read_csv('DemoData/StockTransactions.csv', parse_dates = ['transdate'])
+    else:
+        df = pd.read_csv('CSVs/StockTransactions.csv', parse_dates = ['transdate'])
+
     df.to_sql('stocktransactions', engine, if_exists = 'replace', index = False)
 
 
@@ -59,16 +67,16 @@ def importStockTransactions():
 def importBankTransactions():
     ### imports old transactions, Emma/Dan mint transactions, appends together and inserts into database
 
-    df = pd.read_csv('CSVs/oldtransactions.csv', parse_dates = ['transdate'])
-    df_accrual = pd.read_csv('CSVs/accrual.csv', parse_dates = ['transdate'])
-
-    df = df.append(df_accrual)
-    df = df.append(mintImport())
-    df = df.append(stockPricesImport.stockincome())
-
     if demo: ## only used to demo account to add dummy data. Is turned on above.
-        df_demo = pd.read_csv('CSVs/demo.csv', parse_dates = ['transdate'])
-        df = df.append(df_demo)
+        df = pd.read_csv('DemoData/demotransactions.csv', parse_dates = ['transdate'])
+    else:
+        df = pd.read_csv('CSVs/oldtransactions.csv', parse_dates = ['transdate'])
+        df_accrual = pd.read_csv('CSVs/accrual.csv', parse_dates = ['transdate'])
+
+        df = df.append(df_accrual)
+        df = df.append(mintImport())
+
+    df = df.append(stockPricesImport.stockincome())
 
     df = df.sort('transdate')
 
@@ -126,19 +134,23 @@ def importDatesTable():
 
 def fximport():
 
-    df = pd.read_csv('CSVs/FX rates.csv', parse_dates = ['FXDate'])
+    df = pd.read_csv('Common/FX rates.csv', parse_dates = ['FXDate'])
     df.to_sql('fxrates', engine, if_exists = 'replace')
 
 
 def budgetimport():
 
-    df = pd.read_csv('CSVs/budget.csv')
+    if demo: ## only used to demo account to add dummy data. Is turned on above.
+        df = pd.read_csv('DemoData/budget.csv')
+    else:
+        df = pd.read_csv('CSVs/budget.csv')
+
     df.to_sql('budget', engine, if_exists = 'replace')
 
 
 def categoryimport():
 
-    df = pd.read_csv('CSVs/categories.csv')
+    df = pd.read_csv('Common/categories.csv')
     df.to_sql('categories', engine, if_exists = 'replace')
 
 

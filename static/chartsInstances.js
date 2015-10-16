@@ -102,7 +102,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
     currentBalance.dataTable = currentBalance.initialDraw(currentBalance.data);
     balances.dataTable = balances.initialDraw(balances.data);
     balances.redraw();
-    //balances.finalDraw();
+
 }
 
 

@@ -546,3 +546,11 @@ def sqlSumSpendTable():
        GROUP BY monthdate, bankaccounts.Owner) AS T1
       INNER JOIN fxrates AS FX2 ON monthdate = date(FX2.FXDate)
     '''
+
+
+def sqlowners():
+    return '''
+
+    select distinct bankaccounts.Owner
+      from bankaccounts
+    '''

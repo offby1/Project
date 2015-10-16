@@ -66,6 +66,12 @@ def netincomepage():
     return jsonify(netincomedata=charts.netincomedata())
 
 
+@app.route('/owners/')
+def ownerspage():
+
+    return jsonify(owners=charts.owners())
+
+
 @app.route('/stocks/')
 def stockspage():
 

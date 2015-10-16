@@ -206,3 +206,12 @@ def sumspendingdata():
     df = pd.read_sql(a, engine, parse_dates='transdate')
 
     return returnTable(df)
+
+
+def owners(): ### return list of owners
+
+    a = sqlqueries.sqlowners()
+
+    df = pd.read_sql(a, engine)
+
+    return returnTable(df)

@@ -2,10 +2,6 @@
  * Created by dangoodburn on 10/3/15.
  */
 
-/**
- * Created by emmaachberger on 8/29/15.
- */
-
 
 var chart = function (div, data, divcol, firstTitle, secondTitle, sumcol, valStartCol, categoryEndCol, chartHeight, tooltip) {
 
