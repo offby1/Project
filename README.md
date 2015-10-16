@@ -1,4 +1,4 @@
-# MoneyProject
+# JOYNT
 JOYNT is a Personal Finance Dashboard to give people visibility into accounts in multiple currencies. Its main goals are to:
 - consolidate accounts/investments in all currencies;
 - incorporate non-Bank data and historical data, including any accrual transactions;
