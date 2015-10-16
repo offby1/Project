@@ -1,0 +1,21 @@
+CategoryName,Owner,Amount
+Entertainment,Jack,200
+Alcohol & Bars,Joint,200
+Coffee Shops,Jack,0
+Fast Food,Jack,0
+Groceries,Joint,650
+Restaurants,Joint,750
+Charity,Jack,0
+Gift,Jack,0
+Furnishings,Jack,50
+Home Supplies,Jack,0
+Personal Care,Jack,50
+Shopping,Jack,100
+Travel,Jack,0
+Shopping,Jill,125
+Personal Care,Jill,50
+Coffee Shops,Jill,25
+Pharmacy,Jill,17
+Gift,Jill,0
+Travel,Jill,0
+Food & Dining,Jill,75
