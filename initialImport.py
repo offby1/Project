@@ -137,7 +137,8 @@ def importDatesTable():
 
 def fximport():
 
-    FXImport.fximport()
+    if not demo:
+        FXImport.fximport()
     df = pd.read_csv('Common/FX rates.csv', parse_dates = ['FXDate'])
     df.to_sql('fxrates', engine, if_exists = 'replace')
 
