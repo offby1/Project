@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 
-import instance
+
 
 import sqlqueries
 import stockPricesImport
@@ -85,6 +85,8 @@ def importBankTransactions():
 
 
 def mintImport():
+
+    import instance
 
     mintAccounts = instance.mintaccounts()
 

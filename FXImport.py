@@ -2,7 +2,7 @@ __author__ = 'emmaachberger'
 
 import requests
 import datetime
-import instance
+
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -14,6 +14,8 @@ end_date = False  # False or Format "YYYY-MM-DD"
 
 
 def downloadFX():
+
+    import instance
     line = [
         ['address', 'http://apilayer.net/api/historical?'],
         ['access_key', instance.fxaccesskey()],
@@ -73,9 +75,4 @@ def uploadFX(rates):
 def fximport():
     uploadFX(downloadFX())
 
-"""
-df = pd.read_csv('CSVs/FX rates.csv', parse_dates='FXDate')
-df = df.iloc[:,1:]
-print df
-df.to_csv('CSVs/FX rates.csv', index=False)
-"""
+
