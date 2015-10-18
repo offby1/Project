@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-import charts
+#import charts
 from sqlalchemy import create_engine
 
 application = Flask(__name__)
@@ -11,19 +11,7 @@ def homepage():
 
     return render_template("index.html")
 
-
-@application.route('/front/')
-def frontpage():
-
-    return jsonify(balanceData=charts.balanceData(),
-                   currentBalanceData=charts.currentbalancedata(),
-                   overallbudgetData=charts.overallbudgetData(),
-                   spendingdata=charts.sumspendingdata(),
-                   sumStockTableData=charts.sumstockdata(),
-                   sumstocksPricesData=charts.sumstockPricesData()
-                   )
-
-
+"""
 @application.route('/budget/')
 def budgetpage():
 
@@ -133,7 +121,7 @@ def accrualpage():
     # return jsonify(1)
     return jsonify(accrualData = charts.accruals())
     #return jsonify(stockTableData=charts.stocktabledata())
-
+"""
 
 if __name__ == '__main__':
     application.debug = False
