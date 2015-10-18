@@ -73,7 +73,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['gviz_api.py'],
-    #dependency_links = ['https://github.com/google/google-visualization-python/master#egg=google-visualization-python-2.0.0beta'],
+    #dependency_links = ['http://google-visualization-python.googlecode.com/files/gviz_api_py-1.8.0.tar.gz#egg=gviz_api.py'],
     #dependency_links = ['git+ssh://git@github.com/google/google-visualization-python.git@1.0#egg=google-visualization-python-1.0'],
     #dependency_links = ['https://google-visualization-python.googlecode.com/files/gviz_api_py-1.8.2.tar.gz'],
     dependency_links = ['https://github.com/google/google-visualization-python/zipball/master'],

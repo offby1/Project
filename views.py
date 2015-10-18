@@ -2,17 +2,17 @@ from flask import Flask, jsonify, render_template, request
 import charts
 from sqlalchemy import create_engine
 
-app = Flask(__name__)
+application = Flask(__name__)
 engine = create_engine('sqlite:///money.db')
 
 
-@app.route('/')
+@application.route('/')
 def homepage():
 
     return render_template("index.html")
 
 
-@app.route('/front/')
+@application.route('/front/')
 def frontpage():
 
     return jsonify(balanceData=charts.balanceData(),
@@ -24,89 +24,89 @@ def frontpage():
                    )
 
 
-@app.route('/budget/')
+@application.route('/budget/')
 def budgetpage():
 
     return jsonify(budgetData=charts.budgetData())
 
 
-@app.route('/overallbudget/')
+@application.route('/overallbudget/')
 def overallbudgetpage():
 
     return jsonify(overallbudgetData=charts.overallbudgetData())
 
 
-@app.route('/NIFX/')
+@application.route('/NIFX/')
 def nifxpage():
 
     return jsonify(NIFXdata=charts.NIFXdata())
 
 
-@app.route('/balances/')
+@application.route('/balances/')
 def balancespage():
 
     return jsonify(balanceData=charts.balanceData(), currentBalanceData=charts.currentbalancedata())
 
 
-@app.route('/spending/')
+@application.route('/spending/')
 def spendingpage():
 
     return jsonify(spendingdata=charts.spendingdata())
 
 
-@app.route('/currentspending/')
+@application.route('/currentspending/')
 def currentspendingpage():
 
     return jsonify(spendingdata=charts.sumspendingdata())
 
 
-@app.route('/netincome/')
+@application.route('/netincome/')
 def netincomepage():
 
     return jsonify(netincomedata=charts.netincomedata())
 
 
-@app.route('/owners/')
+@application.route('/owners/')
 def ownerspage():
 
     return jsonify(owners=charts.owners())
 
 
-@app.route('/stocks/')
+@application.route('/stocks/')
 def stockspage():
 
     return jsonify(sumStockTableData=charts.sumstockdata(), sumstocksPricesData=charts.sumstockPricesData())
 
 
-@app.route('/stockPrices/')
+@application.route('/stockPrices/')
 def stockspricespage():
 
     return jsonify(stocksPricesData=charts.stockPricesData())
 
-@app.route('/stocksChart/')
+@application.route('/stocksChart/')
 def stockschartpage():
 
     return jsonify(stockData=charts.stockData())
 
-@app.route('/sumstockPrices/')
+@application.route('/sumstockPrices/')
 def sumstockspricespage():
 
     return jsonify(sumstocksPricesData=charts.sumstockPricesData())
 
 
-@app.route('/stockTable/')
+@application.route('/stockTable/')
 def stocktablepage():
 
     return jsonify(stockTableData=charts.stocktabledata())
 
 
-@app.route('/sumStockTable/')
+@application.route('/sumStockTable/')
 def sumstocktablepage():
 
     return jsonify(sumStockTableData=charts.sumstockdata())
 
 
-@app.route('/transactions/')
+@application.route('/transactions/')
 def transactionspage():
 
     limit = request.args.get('limit', 0, type=int)
@@ -115,7 +115,7 @@ def transactionspage():
     return jsonify(transactionDiv=render_template("transactions.html"), x=x, y=y)
 
 
-@app.route('/transactionsajax/')
+@application.route('/transactionsajax/')
 def transactionsajaxaage():
 
     a = request.args.get('a', 0, type=str)
@@ -125,7 +125,7 @@ def transactionsajaxaage():
     return jsonify(x=x, y=y)
 
 
-@app.route('/accrual/')
+@application.route('/accrual/')
 def accrualpage():
 
     print charts.accruals()
@@ -136,5 +136,5 @@ def accrualpage():
 
 
 if __name__ == '__main__':
-    app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    application.debug = False
+    application.run(host='0.0.0.0', port=5000)
