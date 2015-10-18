@@ -72,7 +72,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['google-visualization-python'],
+    install_requires=['gviz_api.py'],
     #dependency_links = ['https://github.com/google/google-visualization-python/master#egg=google-visualization-python-2.0.0beta'],
     #dependency_links = ['git+ssh://git@github.com/google/google-visualization-python.git@1.0#egg=google-visualization-python-1.0'],
     #dependency_links = ['https://google-visualization-python.googlecode.com/files/gviz_api_py-1.8.2.tar.gz'],
