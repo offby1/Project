@@ -27,19 +27,6 @@ def convert(native, curr, fx):
     else:
         return native / fx
 
-"""
-def returnTable2(df):
-# returns list of table columns and data to be sent to google charts
-
-    columns = df.columns.tolist()
-    columns = columns
-    data = df.values.tolist()
-
-    list = [columns]
-    list.append(data)
-
-    return list
-"""
 
 def returnTable(df):
 # returns list of table columns and data to be sent to google charts

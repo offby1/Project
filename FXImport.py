@@ -2,7 +2,6 @@ __author__ = 'emmaachberger'
 
 import requests
 import datetime
-
 import pandas as pd
 from sqlalchemy import create_engine
 
