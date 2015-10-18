@@ -1,5 +1,4 @@
 Flask==0.10.1
-gviz-api.py==1.8.2
 Jinja2==2.8
 numpy==1.8.0rc1
 pandas==0.16.2
