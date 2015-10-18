@@ -72,16 +72,22 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['google-visualization-python>=2.0.0Beta'],
-    dependency_links = ['https://github.com/google/google-visualization-python/master#egg=google-visualization-python-2.0.0beta'],
+    install_requires=['google-visualization-python'],
+    #dependency_links = ['https://github.com/google/google-visualization-python/master#egg=google-visualization-python-2.0.0beta'],
+    #dependency_links = ['git+ssh://git@github.com/google/google-visualization-python.git@1.0#egg=google-visualization-python-1.0'],
+    #dependency_links = ['https://google-visualization-python.googlecode.com/files/gviz_api_py-1.8.2.tar.gz'],
+    dependency_links = ['https://github.com/google/google-visualization-python/zipball/master'],
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
     # for example:
     # $ pip install -e .[dev,test]
-    extras_require={
-        'dev': ['check-manifest'],
-        'test': ['coverage'],
-    },
+
+    #extras_require={
+    #    'dev': ['check-manifest'],
+    #    'test': ['coverage'],
+    #},
+
+
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
@@ -94,7 +100,7 @@ setup(
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('my_data', ['data/data_file'])],
+    #data_files=[('my_data', ['data/data_file'])],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
