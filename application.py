@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-import charts
+#import charts
 from sqlalchemy import create_engine
 
 application = Flask(__name__)
@@ -10,6 +10,25 @@ engine = create_engine('sqlite:///money.db')
 def homepage():
 
     return render_template("index.html")
+
+
+@application.route('/owners/')
+def ownerspage():
+
+    import sqlite3
+    conn = sqlite3.connect('money.db')
+
+    c = conn.cursor()
+    c.execute('select distinct bankaccounts.Owner from bankaccounts')
+    owners = c.fetchall()
+    conn.close()
+    return jsonify(owners=owners)
+
+"""
+@application.route('/owners/')
+def ownerspage():
+
+    return jsonify(owners=charts.owners())
 
 
 @application.route('/budget/')
@@ -54,10 +73,6 @@ def netincomepage():
     return jsonify(netincomedata=charts.netincomedata())
 
 
-@application.route('/owners/')
-def ownerspage():
-
-    return jsonify(owners=charts.owners())
 
 
 @application.route('/stocks/')
@@ -121,7 +136,7 @@ def accrualpage():
     # return jsonify(1)
     return jsonify(accrualData = charts.accruals())
     #return jsonify(stockTableData=charts.stocktabledata())
-
+"""
 
 if __name__ == '__main__':
     application.debug = True

@@ -208,10 +208,24 @@ def sumspendingdata():
     return returnTable(df)
 
 
-def owners(): ### return list of owners
+def owners2(): ### return list of owners
 
     a = sqlqueries.sqlowners()
 
     df = pd.read_sql(a, engine)
 
     return returnTable(df)
+
+def owners(): ### return list of owners
+
+    import sqlite3
+    conn = sqlite3.connect('money.db')
+
+    a = sqlqueries.sqlowners()
+
+    c = conn.cursor()
+    c.execute(a)
+    owners = c.fetchall()
+    conn.close()
+    return owners
+
