@@ -201,7 +201,7 @@ def sumspendingdata():
     a = sqlqueries.sqlSumSpendTable()
 
     df = pd.read_sql(a, engine, parse_dates='transdate')
-    print df
+
     return returnTable(df)
 
 
