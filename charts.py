@@ -177,12 +177,9 @@ def sumstockPricesData():
     df4 = df4.reset_index()
     df4.columns = ['Stock','Price']
     df = df.fillna(0)
-    #print df4
-    #initial = pd.DataFrame(initial)
-    #print df4
-    #print returnTable(df)#, returnTable(df4)
+
     return returnTable(df), returnTable(df4)
-    #return returnTable(df)
+
 
 
 def sumstockPricesOriginalData():
@@ -204,11 +201,11 @@ def sumspendingdata():
     a = sqlqueries.sqlSumSpendTable()
 
     df = pd.read_sql(a, engine, parse_dates='transdate')
-
+    print df
     return returnTable(df)
 
 
-def owners2(): ### return list of owners
+def owners(): ### return list of owners
 
     a = sqlqueries.sqlowners()
 
@@ -216,7 +213,7 @@ def owners2(): ### return list of owners
 
     return returnTable(df)
 
-def owners(): ### return list of owners
+def owners2(): ### return list of owners
 
     import sqlite3
     conn = sqlite3.connect('money.db')

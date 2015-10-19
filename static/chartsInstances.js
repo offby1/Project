@@ -288,15 +288,24 @@ function initializeSpendingChart(spendingdata) {
 
     function changeNumbers2(e) {
 
-        spend = spendingChart.dataView.getValue(e, 1);
-        goal = spendingChart.dataView.getValue(e, 2);
-        overspend = spendingChart.dataView.getValue(e, 3);
+        console.log(spendingChart.dataView);
+        try {
+            var spend = spendingChart.dataView.getValue(e, 1);
+            var goal = spendingChart.dataView.getValue(e, 2);
+            var overspend = spendingChart.dataView.getValue(e, 3);
+            var label = spendingChart.dataView.getFormattedValue(e, 0)
+        }
+        catch (err) {
+            var spend = 0;
+            var goal = 0;
+            var overspend = 0;
+        }
 
         formatMoneyColor('#selectedmonthspend', spend + overspend);
         formatMoneyColor('#goalSpend', spend + goal);
         formatMoneyColor('#remaining', goal - overspend);
 
-        $('#cardmonthlySpendDiv .secondTitle').text(spendingChart.dataView.getFormattedValue(e, 0));
+        $('#cardmonthlySpendDiv .secondTitle').text(label);
 
     };
 }

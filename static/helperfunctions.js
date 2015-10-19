@@ -55,6 +55,8 @@ function JointButtonClick() {
     var label1 = $('#JointButton').text();
 
     if (label1 === "Combined") {
+        //try { $('#JointButton').text(GLOBALS.owner.getValue(0,0)); }
+        //catch (err) { $('#JointButton').text(GLOBALS.owner.getValue(0,0)); }
         $('#JointButton').text(GLOBALS.owner.getValue(0,0));
     } else {
         var row = GLOBALS.owner.getFilteredRows([{column: 0, value: label1 }]);
