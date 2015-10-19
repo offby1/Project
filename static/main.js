@@ -37,7 +37,8 @@ window.GLOBALS = {
 
 $(document).ready(function() {
 
-    $.getJSON($SCRIPT_ROOT + '/owners', {}, function (data) { initializeOwners(data.owners); });
+    $.getJSON($SCRIPT_ROOT + '/owners', {}, function (data) { console.log(data); });
+    //$.getJSON($SCRIPT_ROOT + '/owners', {}, function (data) { initializeOwners(data.owners); });
     $('#JointButton').click(JointButtonClick);
     $('#CurrencyButton').click(CurrencyButtonClick);
     loadHomePage();
