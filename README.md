@@ -14,29 +14,18 @@ JOYNT is a Personal Finance Dashboard to give people visibility into accounts in
 
 To install from terminal:
 
-$ virtualenv Joynt ("pip install virtualenv" if you don't already have it)
-
-$ source Joynt/bin/activate
-
-$ cd Joynt
-
-$ git clone https://github.com/dgoodburn/Project.git
-
-$ cd Project
-
-$ pip install -r requirements.txt
-
-$ git clone https://github.com/google/google-visualization-python.git
-
-$ cd google-visualization-python
-
-$ python setup.py install
-
-$ cd ..
-
-$ python main.py
-
-$ python application.py
+$ virtualenv Joynt ("pip install virtualenv" if you don't already have it)  
+$ source Joynt/bin/activate  
+$ cd Joynt  
+$ git clone https://github.com/dgoodburn/Project.git  
+$ cd Project  
+$ pip install -r requirements.txt  
+$ git clone https://github.com/google/google-visualization-python.git  
+$ cd google-visualization-python  
+$ python setup.py install  
+$ cd ..  
+$ python main.py  
+$ python application.py  
 
 
 http://localhost:5000/
