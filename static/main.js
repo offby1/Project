@@ -50,11 +50,6 @@ function initializeOwners(data){
 }
 
 
-function clearPage(){
-    GLOBALS.grid.empty(); /// clears all charts on current page
-    GLOBALS.charts = [];
-}
-
 function loadHomePage() {
 
     clearPage();

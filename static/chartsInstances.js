@@ -29,12 +29,16 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
     balances.chartWrapper.setChartType('AreaChart');
     balances.chartWrapper.setContainerId(balances.chartdiv);
 
+    balances.topViewBuffer = 0;
+    balances.bottomViewBuffer = 0;
+
     balances.setMultipleOptions([
         ['lineWidth', 0.05],
         ['areaOpacity', 0.2],
         ['tooltip.trigger', 'none'],
         ['hAxis.gridlines.count', 0],
         ['vAxis.gridlines.count', 0],
+        ['chartArea.top', 0],
         ['chartArea.left', 0],
         ['chartArea.width', '100%'],
         ['chartArea.height', '100%'],
@@ -43,6 +47,7 @@ function initializeBalanceChart(balanceData, currentBalanceData) {
         ['focusTarget', 'datum'],
         ['crosshair.opacity', 0.3],
         ['crosshair.trigger', 'both']
+
     ]);
 
     balances.info = '\
@@ -352,6 +357,9 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
     stockChart.chartWrapper.setChartType('LineChart');
     stockChart.chartWrapper.setContainerId(stockChart.chartdiv);
 
+    stockChart.topViewBuffer = 5;
+    stockChart.bottomViewBuffer = 3;
+
     stockChart.setMultipleOptions([
         ['interpolateNulls', false],
         ['hAxis.gridlines.count', 0],
@@ -367,7 +375,7 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         ['crosshair.trigger', 'both'],
         ['focusTarget', 'datum'],
         ['crosshair.opacity', 0.3],
-        ['vAxis.viewWindowMode', 'pretty']
+        ['vAxis.viewWindowMode', 'explicit']
     ]);
 
     stockChart.info = '\
@@ -414,6 +422,7 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         this.dataView = this.currencyChange(this.dataView);
         this.chartWrapper.setDataTable(this.dataView);
         GLOBALS.formatinddate.format(this.dataView, 0);
+        this.setMinMaxValues(this.getViewRange(this.dataView));
 
         for (var i = 1; i < this.dataView.getNumberOfColumns(); i++) {
             GLOBALS.format4decimals.format(this.dataView, i);
@@ -427,6 +436,7 @@ function initializeStockChart(stockSumData, stockPriceData, originalStockPrice) 
         summaryStockChart.redraw();
 
     };
+
 
     google.visualization.events.removeAllListeners(summaryStockChart.chartWrapper);
     google.visualization.events.removeAllListeners(stockChart.chartWrapper);

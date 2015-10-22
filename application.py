@@ -6,11 +6,11 @@ from initialImport import initialStartup
 application = Flask(__name__)
 engine = create_engine('sqlite:///money.db')
 
-
+"""
 @application.before_first_request
 def create_database():
     initialStartup()
-
+"""
 
 @application.route('/')
 def homepage():

@@ -13,7 +13,7 @@ from helperfunctions import convert
 import FXImport
 
 engine = create_engine('sqlite:///money.db')
-demo = True  # turns on demo transactions
+demo = False  # turns on demo transactions
 mintacct = False  # turns on mint account download
 pd.options.mode.chained_assignment = None  # turns off warning for chained indexing
 

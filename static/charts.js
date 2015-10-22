@@ -27,6 +27,8 @@ var chart = function (div, data, divcol, firstTitle, secondTitle, sumcol, valSta
         this.categoryEndCol = this.valStartCol - 1;
     }
 
+    this.bottomViewBuffer = 0;
+    this.topViewBuffer = 0;
     this.tooltipDiv = 'tooltip' + div;
     this.dashboarddiv = div;
     this.chartdiv = 'chart' + div;
@@ -410,6 +412,31 @@ var chart = function (div, data, divcol, firstTitle, secondTitle, sumcol, valSta
         }
 
     };
+
+    this.getViewRange = function(dataView) {
+
+        var columnRange = minValue = maxValue = [];
+
+        for (var i = 1; i < dataView.getNumberOfColumns(); i++) {
+            columnRange = dataView.getColumnRange(i);
+            minValue.push(columnRange.min);
+            maxValue.push(columnRange.max);
+        }
+
+        var minimumYValue = getMinOfArray(minValue);
+        var maximumYValue = getMaxOfArray(maxValue);
+
+        return [minimumYValue, maximumYValue]
+
+    };
+
+    this.setMinMaxValues = function(viewRange) {
+        this.setMultipleOptions([
+            ['vAxes.0.viewWindow.min', viewRange[0] - this.bottomViewBuffer],
+            ['vAxes.0.viewWindow.max', viewRange[1] + this.topViewBuffer]
+        ]);
+    };
+
 
     GLOBALS.charts.push([this]);
 

@@ -137,3 +137,10 @@ function formatMoneyColor(div, number) {
 }
 
 
+function clearPage(){
+    GLOBALS.grid.empty(); /// clears all charts on current page
+    GLOBALS.charts.forEach(function(value) { $("#"+value[0].chartdiv).length > 0 ? value[0].redraw() : void(0); })
+    GLOBALS.charts = [];
+}
+
+
