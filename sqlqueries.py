@@ -542,7 +542,7 @@ def sqlSumSpendTable():
          INNER JOIN bankaccounts ON transactions.accountname = bankaccounts.MintAccountName
          INNER JOIN fxrates AS FX1 ON transactions.transdate = FX1.FXDate
          INNER JOIN categories ON categories.Category = transactions.category
-       WHERE monthdate >= date(current_date, '-6 month') AND bankaccounts.JointColumn = "Joint" AND categories.Spending
+       WHERE monthdate >= date(current_date, '-6 month') AND categories.Spending
        GROUP BY monthdate, bankaccounts.Owner) AS T1
       INNER JOIN fxrates AS FX2 ON monthdate = date(FX2.FXDate)
     '''
